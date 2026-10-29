@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/playwright/python:v1.49.0-noble
+FROM mcr.microsoft.com/playwright/python:v1.64.1-noble
 
 WORKDIR /app
 COPY . /app
 
-# Pin playwright to 1.49.0 so it matches the pre-installed browser perfectly
-RUN pip install --no-cache-dir python-telegram-bot requests "playwright==1.49.0"
+RUN pip install --no-cache-dir python-telegram-bot requests playwright
+RUN playwright install chromium
 
 CMD ["python", "bot.py"]
