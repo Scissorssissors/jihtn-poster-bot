@@ -6,6 +6,9 @@ import random
 import asyncio
 import urllib.request
 import urllib.parse
+import http.server
+import socketserver
+import threading
 from playwright.async_api import async_playwright
 from telegram import Update
 from telegram.request import HTTPXRequest
@@ -13,7 +16,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 TELEGRAM_TOKEN = "8955985482:AAFGVlfGRbttDANQhO40yYTBw1xITyt2s20"
 
-# --- 1. POSTER TEMPLATE (OFFICIAL MASTER TEMPLATE) ---
+# --- 1. POSTER TEMPLATE ---
 TEMPLATE_CONTENT = """<!DOCTYPE html>
 <html lang="ta">
 <head>
@@ -38,17 +41,16 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     padding: 24px 38px 24px 38px;
   }
 
- /* --- HEADER: Massive, Authoritative Official Logo --- */
   .header { 
     display: flex; 
     align-items: center; 
-    gap: 26px; 
-    height: 170px; 
+    gap: 24px; 
+    height: 154px; 
     width: 1004px;
     margin: 0 auto;
   }
   .header img { 
-    height: 168px; 
+    height: 148px; 
     width: auto;
     object-fit: contain; 
     flex-shrink: 0;
@@ -58,10 +60,15 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     flex-direction: column;
     justify-content: center;
     color: #143e6d; 
-    font-size: 52px; 
+    font-size: 50px; 
     font-weight: 800; 
     line-height: 1.12; 
     letter-spacing: -0.4px;
+  }
+  .underline-hind {
+    text-decoration: underline;
+    text-underline-offset: 7px;
+    text-decoration-thickness: 4px;
   }
   .header-text .sub-text { 
     font-size: 36px; 
@@ -70,7 +77,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: -0.2px;
   }
 
-  /* --- MAIN CARD --- */
   .card {
     position: relative; 
     width: 1004px; 
@@ -89,7 +95,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     object-fit: cover; 
   }
 
-  /* Dynamic Gradient Shield */
   .gradient-overlay {
     position: absolute; 
     top: 0; 
@@ -99,7 +104,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     background: {{GRADIENT_CSS}};
   }
 
-  /* --- VERSE TEXT: HERO SCALING ENGINE --- */
   .verse-container {
     position: relative; 
     z-index: 2;
@@ -113,7 +117,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.2px;
   }
 
-  /* Surah Pill Badge at bottom */
   .surah-tag {
     position: absolute; 
     bottom: 26px; 
@@ -131,7 +134,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.4px;
   }
 
-  /* --- FOOTER: Anchored to Card Borders --- */
   .footer {
     display: flex; 
     justify-content: space-between; 
@@ -168,11 +170,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
 </body>
 </html>"""
 
-with open("template.html", "w", encoding="utf-8") as f:
-    f.write(TEMPLATE_CONTENT)
-
-# --- 2. COMPLETE QURAN DIRECTORY (114 SURAHS WITH EXACT AYAH COUNTS & THEMES) ---
-# Format: Surah Number -> (Tamil Name, Total Ayahs, Default Theological Theme)
+# --- 2. SURAH DIRECTORY & METADATA ---
 QURAN_DIRECTORY = {
     1: ("அல் ஃபாத்திஹா", 7, "kaaba_sky"),
     2: ("அல் பகரா", 286, "historic_amber"),
@@ -239,7 +237,7 @@ QURAN_DIRECTORY = {
     63: ("அல் முனாஃபிகூன்", 11, "solemn_resurrection"),
     64: ("அத் தஃகாபுன்", 18, "solemn_resurrection"),
     65: ("அத் தலாக்", 12, "madinah_noor"),
-    66: ("அத் தஹ்ரீம்", 12, "madinah_noor"),  # Surah 66 has only 12 ayahs
+    66: ("அத் தஹ்ரீம்", 12, "madinah_noor"),
     67: ("அல் முல்க்", 30, "celestial_cosmos"),
     68: ("அல் கலம்", 52, "madinah_noor"),
     69: ("அல் ஹாகா", 52, "solemn_resurrection"),
@@ -290,9 +288,8 @@ QURAN_DIRECTORY = {
     114: ("அந் நாஸ்", 6, "kaaba_sky")
 }
 
-# --- 3. AUDITED 100% HALAL IMAGE VAULT (NO CARS, NO VANS, NO REPEATS) ---
+# --- 3. AUDITED 100% HALAL IMAGE VAULT ---
 THEME_PALETTES = {
-    # 1. Paradise, Jannah & Pure Waters (Surah 88:11, 55, 76)
     "jannah_gardens": {
         "gradient": "linear-gradient(180deg, rgba(12, 68, 44, 0.98) 0%, rgba(15, 82, 54, 0.94) 52%, rgba(15, 82, 54, 0.45) 82%, rgba(0,0,0,0) 100%)",
         "text_color": "#ffffff",
@@ -300,66 +297,54 @@ THEME_PALETTES = {
         "images": [
             "https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=1080&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1080&auto=format&fit=crop"
         ]
     },
-    # 2. Kaaba, Makkah, Hajj & Sanctuary
     "kaaba_sky": {
         "gradient": "linear-gradient(180deg, rgba(165, 205, 225, 0.98) 0%, rgba(190, 220, 235, 0.92) 50%, rgba(210, 232, 245, 0.35) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#112a45",
         "shadow": "0 2px 8px rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.15)",
         "images": [
             "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?q=80&w=1080&auto=format&fit=crop"
         ]
     },
-    # 3. Light (Noor), Mosque Arches, Revelation & Wisdom (Surah 18, 24, 36, 66)
     "madinah_noor": {
         "gradient": "linear-gradient(180deg, rgba(185, 115, 15, 0.98) 0%, rgba(165, 100, 10, 0.93) 50%, rgba(165, 100, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
         "images": [
             "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop"
         ]
     },
-    # 4. Cosmos, Heavens, Universe & Stars (Surah 30, 67, 53)
     "celestial_cosmos": {
         "gradient": "linear-gradient(180deg, rgba(10, 24, 52, 0.98) 0%, rgba(14, 32, 68, 0.93) 50%, rgba(14, 32, 68, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)",
         "images": [
             "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop"
         ]
     },
-    # 5. Historic Struggle, Martyrdom & Trials (Surah 2, 3, 4, 9 - Ref 1)
     "historic_amber": {
         "gradient": "linear-gradient(180deg, rgba(215, 80, 10, 0.98) 0%, rgba(200, 72, 8, 0.94) 50%, rgba(195, 70, 8, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 5px 20px rgba(0,0,0,0.55)",
         "images": [
             "https://images.unsplash.com/photo-1512958789358-4dac567096e8?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop"
         ]
     },
-    # 6. Solemnity & Day of Resurrection (Surah 99, 100, 101)
     "solemn_resurrection": {
         "gradient": "linear-gradient(180deg, rgba(88, 16, 28, 0.98) 0%, rgba(72, 14, 24, 0.93) 50%, rgba(55, 12, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)",
         "images": [
             "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop"
         ]
     },
-    # 7. Oceans, Ships & Rain
     "waters_oceans": {
         "gradient": "linear-gradient(180deg, rgba(10, 55, 75, 0.98) 0%, rgba(12, 68, 90, 0.93) 50%, rgba(12, 68, 90, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
@@ -369,7 +354,6 @@ THEME_PALETTES = {
             "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop"
         ]
     },
-    # 8. Earth & Desert Dawn
     "desert_dawn": {
         "gradient": "linear-gradient(180deg, rgba(195, 95, 20, 0.98) 0%, rgba(175, 85, 16, 0.93) 50%, rgba(175, 85, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
@@ -384,7 +368,7 @@ THEME_PALETTES = {
 HISTORY_FILE = "used_images_history.json"
 
 def get_non_repeating_image(theme_key: str) -> str:
-    palette = THEME_PALETTES[theme_key]
+    palette = THEME_PALETTES.get(theme_key, THEME_PALETTES["madinah_noor"])
     available_images = palette["images"]
     
     used_history = {}
@@ -417,7 +401,6 @@ def get_non_repeating_image(theme_key: str) -> str:
 def get_accurate_verse_theme(surah: int, verse_text: str):
     t = verse_text.lower()
     
-    # Priority keyword detection
     if any(k in t for k in ["சுவனம்", "தோட்டம்", "நதிகள்", "பயனற்ற", "இன்பம்", "அருட்கொடை", "நிழல்", "கனி"]):
         theme_key = "jannah_gardens"
     elif any(k in t for k in ["கஃபா", "மக்கா", "ஹஜ்", "ஆலயத்தை", "ஹரம்", "கிப்லா"]):
@@ -429,7 +412,6 @@ def get_accurate_verse_theme(surah: int, verse_text: str):
     elif any(k in t for k in ["கடல்", "மழை", "தண்ணீர்", "மேகம்", "கப்பல்", "அலை"]):
         theme_key = "waters_oceans"
     else:
-        # Fallback to predefined verified Surah metadata
         _, _, default_theme = QURAN_DIRECTORY.get(surah, ("ஸூரா", 0, "historic_amber"))
         theme_key = default_theme
 
@@ -437,7 +419,6 @@ def get_accurate_verse_theme(surah: int, verse_text: str):
     remote_img_url = get_non_repeating_image(theme_key)
     return palette, remote_img_url
 
-# --- 4. LOCAL IMAGE DOWNLOADER ---
 def download_image_locally(url: str, local_path: str = "bg_current.jpg") -> str:
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     try:
@@ -445,19 +426,15 @@ def download_image_locally(url: str, local_path: str = "bg_current.jpg") -> str:
         with urllib.request.urlopen(req, timeout=12) as response, open(local_path, 'wb') as out_file:
             out_file.write(response.read())
         return local_path
-    except Exception as e:
-        print(f"Download notice: {e}")
+    except Exception:
         return local_path
 
-# --- 5. VERSE FETCHER (VALIDATED & CLEANED) ---
 def fetch_any_quran_verse(surah: int, ayah: int):
-    # Validation 1: Check Surah range
     if surah < 1 or surah > 114:
         raise ValueError("❌ தவறான ஸூரா எண்! (1 முதல் 114 வரை உள்ள ஸூராவைத் தேர்ந்தெடுக்கவும்).")
 
     raw_name, max_ayahs, _ = QURAN_DIRECTORY[surah]
 
-    # Validation 2: Check Ayah range against authentic Quran directory
     if ayah < 1 or ayah > max_ayahs:
         raise ValueError(f"❌ ஸூரா {raw_name} ({surah})-ல் மொத்தம் {max_ayahs} வசனங்கள் மட்டுமே உள்ளன!\n(1 முதல் {max_ayahs} வரை உள்ள வசனத்தை உள்ளிடவும்).")
 
@@ -469,8 +446,8 @@ def fetch_any_quran_verse(surah: int, ayah: int):
             data = json.loads(resp.read().decode('utf-8'))
             if data.get("status") == "OK":
                 verse_text = data["data"]["text"].strip()
-    except Exception as e:
-        print(f"AlQuran notice: {e}")
+    except Exception:
+        pass
 
     if not verse_text:
         try:
@@ -478,23 +455,18 @@ def fetch_any_quran_verse(surah: int, ayah: int):
             req2 = urllib.request.Request(cdn_url, headers={'User-Agent': 'Mozilla/5.0'})
             with urllib.request.urlopen(req2, timeout=8) as resp2:
                 verse_text = json.loads(resp2.read().decode('utf-8'))["text"].strip()
-        except Exception as e:
-            print(f"CDN notice: {e}")
+        except Exception:
+            pass
 
-    # Clean verse number suffixes like "(66:1)"
     verse_text = re.sub(r'\s*\(\d+:\d+\)\s*$', '', verse_text).strip()
-
-    # Strip trailing hyphens/dashes and replace with full stop
     verse_text = re.sub(r'[\-\–\—\s]+$', '', verse_text).strip()
     if not verse_text.endswith(('.', '!', '?', '”', '"')):
         verse_text += '.'
 
-    # Validation 3: Ensure text is not empty or just a punctuation mark
     clean_check = verse_text.strip(" .!?-\"'“”")
     if len(clean_check) < 2:
         raise ValueError(f"❌ ஸூரா {raw_name} {surah}:{ayah}-ன் உரை கிடைக்கவில்லை!")
 
-    # Build reference
     if raw_name == "ரூம்":
         reference = f"ஸூரத்துர் ரூம் || {surah}:{ayah}"
     elif raw_name == "புரூஜ்":
@@ -524,8 +496,18 @@ def fetch_any_quran_verse(surah: int, ayah: int):
 
     return verse_text, reference
 
-# --- 6. RENDERER WITH HERO TYPOGRAPHY SCALING ---
+# --- 4. PRE-WARMED PLAYWRIGHT BROWSER ---
+GLOBAL_BROWSER = None
+GLOBAL_PLAYWRIGHT = None
+
+async def init_browser():
+    global GLOBAL_BROWSER, GLOBAL_PLAYWRIGHT
+    GLOBAL_PLAYWRIGHT = await async_playwright().start()
+    GLOBAL_BROWSER = await GLOBAL_PLAYWRIGHT.chromium.launch(args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"])
+    print("⚡ Pre-warmed Chromium Browser Online!")
+
 async def render_poster(local_image_name: str, tamil_text: str, surah_ref: str, palette: dict, output_path: str):
+    global GLOBAL_BROWSER
     char_count = len(tamil_text)
     
     if char_count <= 55:
@@ -549,9 +531,7 @@ async def render_poster(local_image_name: str, tamil_text: str, surah_ref: str, 
         line_height = "1.50"
         padding = "50px 45px 20px 45px"
 
-    with open("template.html", "r", encoding="utf-8") as f:
-        html = f.read()
-
+    html = TEMPLATE_CONTENT
     html = html.replace("{{IMAGE_PATH}}", local_image_name)
     html = html.replace("{{VERSE_TEXT}}", tamil_text)
     html = html.replace("{{SURAH_REF}}", surah_ref)
@@ -562,48 +542,34 @@ async def render_poster(local_image_name: str, tamil_text: str, surah_ref: str, 
     html = html.replace("{{TEXT_COLOR}}", palette["text_color"])
     html = html.replace("{{TEXT_SHADOW}}", palette["shadow"])
 
-    temp_html = "temp_render.html"
-    with open(temp_html, "w", encoding="utf-8") as f:
-        f.write(html)
+    page = await GLOBAL_BROWSER.new_page(viewport={"width": 1080, "height": 1380})
+    await page.set_content(html, wait_until="load")
+    await page.evaluate("document.fonts.ready")
+    await page.wait_for_timeout(200)
+    await page.screenshot(path=output_path)
+    await page.close()
 
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(args=["--no-sandbox", "--disable-setuid-sandbox"])
-        page = await browser.new_page(viewport={"width": 1080, "height": 1380})
-        await page.goto(f"file://{os.path.abspath(temp_html)}", wait_until="load")
-        await page.evaluate("document.fonts.ready")
-        await page.wait_for_timeout(350)
-        await page.screenshot(path=output_path)
-        await browser.close()
-
-    if os.path.exists(temp_html):
-        os.remove(temp_html)
-
-# --- 7. TELEGRAM BOT HANDLER ---
+# --- 5. TELEGRAM HANDLER ---
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text.strip()
     match = re.match(r"^(\d{1,3})[:\s](\d{1,3})$", text)
 
     if not match:
-        await update.message.reply_text("ℹ️ Please send Surah and Ayah like: 66:8 or 88:11")
+        await update.message.reply_text("ℹ️ Please send Surah and Ayah like: 88:11 or 66:8")
         return
 
     surah, ayah = int(match.group(1)), int(match.group(2))
     
     try:
-        # Step A: Validate and Fetch Verse
         verse_text, reference = fetch_any_quran_verse(surah, ayah)
+        status_msg = await update.message.reply_text(f"⚡ Generating {reference} in 3 seconds...")
 
-        status_msg = await update.message.reply_text(f"⚡ Generating verified poster for {reference}...")
-
-        # Step B: Pick appropriate palette & non-repeating image
         palette, remote_img_url = get_accurate_verse_theme(surah, verse_text)
         local_img = download_image_locally(remote_img_url, "bg_current.jpg")
 
-        # Step C: Render poster
         out_file = f"poster_{surah}_{ayah}.png"
         await render_poster(local_img, verse_text, reference, palette, out_file)
 
-        # Step D: Send directly to phone
         with open(out_file, "rb") as doc:
             await update.message.reply_document(document=doc, caption=f"✅ {reference}")
 
@@ -612,19 +578,46 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             os.remove(out_file)
 
     except ValueError as val_err:
-        # Friendly, clear error message when user inputs an invalid ayah count
         await update.message.reply_text(str(val_err))
     except Exception as err:
         await update.message.reply_text(f"❌ Error: {str(err)}")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Assalamu Alaikum! Send any Surah and Ayah (e.g. 66:8, 88:11, or 30:22) to generate your verified poster.")
+    await update.message.reply_text("Assalamu Alaikum! Send any Surah and Ayah (e.g. 88:11 or 66:8) to generate your poster.")
 
-if __name__ == "__main__":
-    print("🚀 Starting Production-Grade Halal Poster Bot...")
+# --- 6. RENDER HEALTH CHECK SERVER (TELLS RENDER "I AM LIVE") ---
+class HealthHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(b"Bot is Healthy and Live!")
+    def log_message(self, format, *args):
+        pass
+
+def run_render_server():
+    port = int(os.environ.get("PORT", 10000))
+    with socketserver.TCPServer(("", port), HealthHandler) as httpd:
+        print(f"✅ Render Port Server listening on port {port}")
+        httpd.serve_forever()
+
+threading.Thread(target=run_render_server, daemon=True).start()
+
+# --- 7. START BOT ---
+async def main():
+    await init_browser()
     req = HTTPXRequest(connect_timeout=60.0, read_timeout=60.0)
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).request(req).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("✅ System Online: 114 Surahs Validated & Zero-Blank Protection Active!")
-    app.run_polling()
+    
+    print("✅ High-Speed Zero-Latency Cloud Engine Online!")
+    await app.initialize()
+    await app.start()
+    await app.updater.start_polling()
+    
+    while True:
+        await asyncio.sleep(3600)
+
+if __name__ == "__main__":
+    asyncio.run(main())
