@@ -4,6 +4,7 @@ import re
 import json
 import random
 import asyncio
+import base64
 import urllib.request
 import urllib.parse
 import http.server
@@ -16,7 +17,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 TELEGRAM_TOKEN = "8955985482:AAFGVlfGRbttDANQhO40yYTBw1xITyt2s20"
 
-# --- 1. POSTER TEMPLATE ---
+# --- 1. POSTER TEMPLATE (BASE64 IN-MEMORY IMAGES) ---
 TEMPLATE_CONTENT = """<!DOCTYPE html>
 <html lang="ta">
 <head>
@@ -41,6 +42,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     padding: 24px 38px 24px 38px;
   }
 
+  /* --- HEADER: Large Logo & Aligned Title --- */
   .header { 
     display: flex; 
     align-items: center; 
@@ -77,6 +79,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: -0.2px;
   }
 
+  /* --- MAIN CARD --- */
   .card {
     position: relative; 
     width: 1004px; 
@@ -104,6 +107,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     background: {{GRADIENT_CSS}};
   }
 
+  /* --- VERSE TEXT: HERO SCALING ENGINE --- */
   .verse-container {
     position: relative; 
     z-index: 2;
@@ -117,6 +121,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.2px;
   }
 
+  /* Surah Pill Badge at bottom */
   .surah-tag {
     position: absolute; 
     bottom: 26px; 
@@ -134,6 +139,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.4px;
   }
 
+  /* --- FOOTER: Aligned with Card Edges --- */
   .footer {
     display: flex; 
     justify-content: space-between; 
@@ -151,14 +157,14 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
 </head>
 <body>
   <div class="header">
-    <img src="logo.png" onerror="this.src='Logo.png'; this.onerror=null;" alt="JIH Logo">
+    <img src="{{LOGO_DATA_URI}}" alt="JIH Logo">
     <div class="header-text">
       <span>ஜமாஅத்தே இஸ்லாமி <span class="underline-hind">ஹிந்த்</span></span>
       <span class="sub-text">தமிழ்நாடு & புதுச்சேரி</span>
     </div>
   </div>
   <div class="card">
-    <img class="bg-image" src="{{IMAGE_PATH}}" alt="Background">
+    <img class="bg-image" src="{{IMAGE_DATA_URI}}" alt="Background">
     <div class="gradient-overlay"></div>
     <div class="verse-container">{{VERSE_TEXT}}</div>
     <div class="surah-tag">{{SURAH_REF}}</div>
@@ -259,7 +265,7 @@ QURAN_DIRECTORY = {
     85: ("புரூஜ்", 22, "celestial_cosmos"),
     86: ("அத் தாரிக்", 17, "celestial_cosmos"),
     87: ("அல் அஃலா", 19, "jannah_gardens"),
-    88: ("ஃகாஷியா", 26, "jannah_gardens"),
+    88: ("ஃகாஷியா", 26, "solemn_resurrection"),
     89: ("அல் ஃபஜ்ர்", 30, "jannah_gardens"),
     90: ("அல் பலத்", 20, "kaaba_sky"),
     91: ("அஷ் ஷம்ஸ்", 15, "celestial_cosmos"),
@@ -401,14 +407,15 @@ def get_non_repeating_image(theme_key: str) -> str:
 def get_accurate_verse_theme(surah: int, verse_text: str):
     t = verse_text.lower()
     
-    if any(k in t for k in ["சுவனம்", "தோட்டம்", "நதிகள்", "பயனற்ற", "இன்பம்", "அருட்கொடை", "நிழல்", "கனி"]):
+    # Text-based overrides
+    if any(k in t for k in ["சூழ்ந்து", "கியாம", "கப்று", "எழுப்பப்படும்", "மறுமை", "நடுங்கும்", "சாம்பல்", "மரண", "தீர்ப்பு"]):
+        theme_key = "solemn_resurrection"
+    elif any(k in t for k in ["சுவனம்", "தோட்டம்", "நதிகள்", "பயனற்ற", "இன்பம்", "அருட்கொடை", "நிழல்", "கனி"]):
         theme_key = "jannah_gardens"
     elif any(k in t for k in ["கஃபா", "மக்கா", "ஹஜ்", "ஆலயத்தை", "ஹரம்", "கிப்லா"]):
         theme_key = "kaaba_sky"
     elif any(k in t for k in ["இறைவழி", "கொல்லப்பட்ட", "பொறுமை", "சோதனை", "உயிரோடு", "போராடு", "தியாகம்"]):
         theme_key = "historic_amber"
-    elif any(k in t for k in ["கப்று", "எழுப்பப்படும்", "மறுமை", "நடுங்கும்", "சாம்பல்", "மரண", "தீர்ப்பு"]):
-        theme_key = "solemn_resurrection"
     elif any(k in t for k in ["கடல்", "மழை", "தண்ணீர்", "மேகம்", "கப்பல்", "அலை"]):
         theme_key = "waters_oceans"
     else:
@@ -418,6 +425,24 @@ def get_accurate_verse_theme(surah: int, verse_text: str):
     palette = THEME_PALETTES.get(theme_key, THEME_PALETTES["madinah_noor"])
     remote_img_url = get_non_repeating_image(theme_key)
     return palette, remote_img_url
+
+# --- 4. EMBED IMAGES AS BASE64 (PREVENTS BROKEN IMAGES) ---
+def get_base64_data_uri(filepath: str, mime: str = "image/jpeg") -> str:
+    """Converts a local file into a Base64 string so it can NEVER fail or be broken."""
+    if os.path.exists(filepath):
+        try:
+            with open(filepath, "rb") as f:
+                b64 = base64.b64encode(f.read()).decode("utf-8")
+                return f"data:{mime};base64,{b64}"
+        except Exception:
+            pass
+    return ""
+
+def get_logo_data_uri() -> str:
+    for name in ["Logo.png", "logo.png"]:
+        if os.path.exists(name):
+            return get_base64_data_uri(name, "image/png")
+    return ""
 
 def download_image_locally(url: str, local_path: str = "bg_current.jpg") -> str:
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
@@ -496,7 +521,7 @@ def fetch_any_quran_verse(surah: int, ayah: int):
 
     return verse_text, reference
 
-# --- 4. PRE-WARMED PLAYWRIGHT BROWSER ---
+# --- 5. PERSISTENT FAST PLAYWRIGHT BROWSER ---
 GLOBAL_BROWSER = None
 GLOBAL_PLAYWRIGHT = None
 
@@ -531,8 +556,13 @@ async def render_poster(local_image_name: str, tamil_text: str, surah_ref: str, 
         line_height = "1.50"
         padding = "50px 45px 20px 45px"
 
+    # Convert both images to in-memory Base64 data URIs
+    logo_data = get_logo_data_uri()
+    bg_data = get_base64_data_uri(local_image_name, "image/jpeg")
+
     html = TEMPLATE_CONTENT
-    html = html.replace("{{IMAGE_PATH}}", local_image_name)
+    html = html.replace("{{LOGO_DATA_URI}}", logo_data)
+    html = html.replace("{{IMAGE_DATA_URI}}", bg_data)
     html = html.replace("{{VERSE_TEXT}}", tamil_text)
     html = html.replace("{{SURAH_REF}}", surah_ref)
     html = html.replace("{{DYNAMIC_FONT_SIZE}}", font_size)
@@ -549,20 +579,20 @@ async def render_poster(local_image_name: str, tamil_text: str, surah_ref: str, 
     await page.screenshot(path=output_path)
     await page.close()
 
-# --- 5. TELEGRAM HANDLER ---
+# --- 6. TELEGRAM BOT HANDLER ---
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text.strip()
     match = re.match(r"^(\d{1,3})[:\s](\d{1,3})$", text)
 
     if not match:
-        await update.message.reply_text("ℹ️ Please send Surah and Ayah like: 88:11 or 66:8")
+        await update.message.reply_text("ℹ️ Please send Surah and Ayah like: 88:1 or 30:22")
         return
 
     surah, ayah = int(match.group(1)), int(match.group(2))
     
     try:
         verse_text, reference = fetch_any_quran_verse(surah, ayah)
-        status_msg = await update.message.reply_text(f"⚡ Generating {reference} in 3 seconds...")
+        status_msg = await update.message.reply_text(f"⚡ Generating {reference} in 2 seconds...")
 
         palette, remote_img_url = get_accurate_verse_theme(surah, verse_text)
         local_img = download_image_locally(remote_img_url, "bg_current.jpg")
@@ -583,9 +613,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"❌ Error: {str(err)}")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Assalamu Alaikum! Send any Surah and Ayah (e.g. 88:11 or 66:8) to generate your poster.")
+    await update.message.reply_text("Assalamu Alaikum! Send any Surah and Ayah (e.g. 88:1 or 30:22) to generate your poster.")
 
-# --- 6. RENDER HEALTH CHECK SERVER (TELLS RENDER "I AM LIVE") ---
+# --- 7. RENDER HEALTH CHECK SERVER ---
 class HealthHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -598,12 +628,11 @@ class HealthHandler(http.server.SimpleHTTPRequestHandler):
 def run_render_server():
     port = int(os.environ.get("PORT", 10000))
     with socketserver.TCPServer(("", port), HealthHandler) as httpd:
-        print(f"✅ Render Port Server listening on port {port}")
         httpd.serve_forever()
 
 threading.Thread(target=run_render_server, daemon=True).start()
 
-# --- 7. START BOT ---
+# --- 8. START BOT ---
 async def main():
     await init_browser()
     req = HTTPXRequest(connect_timeout=60.0, read_timeout=60.0)
@@ -611,7 +640,7 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
-    print("✅ High-Speed Zero-Latency Cloud Engine Online!")
+    print("✅ High-Speed In-Memory Cloud Engine Online!")
     await app.initialize()
     await app.start()
     await app.updater.start_polling()
