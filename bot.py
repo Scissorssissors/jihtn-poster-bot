@@ -17,7 +17,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 TELEGRAM_TOKEN = "8955985482:AAFGVlfGRbttDANQhO40yYTBw1xITyt2s20"
 
-# --- 1. POSTER TEMPLATE (BASE64 IN-MEMORY IMAGES) ---
+# --- 1. POSTER TEMPLATE (OFFICIAL MASTER KIT) ---
 TEMPLATE_CONTENT = """<!DOCTYPE html>
 <html lang="ta">
 <head>
@@ -42,7 +42,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     padding: 24px 38px 24px 38px;
   }
 
-  /* --- HEADER: Large Logo & Aligned Title --- */
   .header { 
     display: flex; 
     align-items: center; 
@@ -79,7 +78,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: -0.2px;
   }
 
-  /* --- MAIN CARD --- */
   .card {
     position: relative; 
     width: 1004px; 
@@ -107,7 +105,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     background: {{GRADIENT_CSS}};
   }
 
-  /* --- VERSE TEXT: HERO SCALING ENGINE --- */
   .verse-container {
     position: relative; 
     z-index: 2;
@@ -121,7 +118,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.2px;
   }
 
-  /* Surah Pill Badge at bottom */
   .surah-tag {
     position: absolute; 
     bottom: 26px; 
@@ -139,7 +135,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.4px;
   }
 
-  /* --- FOOTER: Aligned with Card Edges --- */
   .footer {
     display: flex; 
     justify-content: space-between; 
@@ -176,81 +171,81 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
 </body>
 </html>"""
 
-# --- 2. SURAH DIRECTORY & METADATA ---
+# --- 2. SURAH DIRECTORY & METADATA (114 SURAHS) ---
 QURAN_DIRECTORY = {
-    1: ("அல் ஃபாத்திஹா", 7, "kaaba_sky"),
+    1: ("அல் ஃபாத்திஹா", 7, "sacred_sanctuary"),
     2: ("அல் பகரா", 286, "historic_amber"),
     3: ("ஆல இம்ரான்", 200, "historic_amber"),
     4: ("அந் நிஸா", 176, "historic_amber"),
-    5: ("அல் மாயிதா", 120, "madinah_noor"),
+    5: ("அல் மாயிதா", 120, "masjid_noor"),
     6: ("அல் அன்ஆம்", 165, "celestial_cosmos"),
     7: ("அல் அஃராஃப்", 206, "historic_amber"),
     8: ("அல் அன்ஃபால்", 75, "historic_amber"),
     9: ("அத் தவ்பா", 129, "historic_amber"),
     10: ("யூனுஸ்", 109, "waters_oceans"),
     11: ("ஹூத்", 123, "historic_amber"),
-    12: ("யூஸுஃப்", 111, "madinah_noor"),
+    12: ("யூஸுஃப்", 111, "masjid_noor"),
     13: ("அர் ரஃது", 43, "celestial_cosmos"),
-    14: ("இப்ராஹீம்", 52, "kaaba_sky"),
+    14: ("இப்ராஹீம்", 52, "sacred_sanctuary"),
     15: ("அல் ஹிஜ்ர்", 99, "desert_dawn"),
     16: ("அந் நஹ்ல்", 128, "jannah_gardens"),
-    17: ("அல் இஸ்ரா", 111, "madinah_noor"),
-    18: ("கஹ்ஃப்", 110, "madinah_noor"),
+    17: ("அல் இஸ்ரா", 111, "masjid_noor"),
+    18: ("கஹ்ஃப்", 110, "masjid_noor"),
     19: ("மர்யம்", 98, "jannah_gardens"),
-    20: ("தாஹா", 135, "madinah_noor"),
+    20: ("தாஹா", 135, "masjid_noor"),
     21: ("அல் அன்பியா", 112, "historic_amber"),
-    22: ("அல் ஹஜ்", 78, "kaaba_sky"),
+    22: ("அல் ஹஜ்", 78, "sacred_sanctuary"),
     23: ("அல் முஃமினூன்", 118, "jannah_gardens"),
-    24: ("அந் நூர்", 64, "madinah_noor"),
+    24: ("அந் நூர்", 64, "masjid_noor"),
     25: ("அல் ஃபுர்கான்", 77, "waters_oceans"),
     26: ("அஷ் ஷுஅரா", 227, "historic_amber"),
     27: ("அந் நம்ல்", 93, "desert_dawn"),
     28: ("அல் கஸஸ்", 88, "historic_amber"),
     29: ("அல் அன்கபூத்", 69, "historic_amber"),
     30: ("ரூம்", 60, "celestial_cosmos"),
-    31: ("லுக்மான்", 34, "madinah_noor"),
+    31: ("லுக்மான்", 34, "masjid_noor"),
     32: ("அஸ் ஸஜ்தா", 30, "solemn_resurrection"),
     33: ("அல் அஹ்ஸாப்", 73, "historic_amber"),
     34: ("ஸபா", 54, "desert_dawn"),
     35: ("ஃபாதிர்", 45, "celestial_cosmos"),
-    36: ("யாஸீன்", 83, "madinah_noor"),
+    36: ("யாஸீன்", 83, "masjid_noor"),
     37: ("அஸ் ஸாஃப்பாத்", 182, "celestial_cosmos"),
     38: ("ஸாத்", 88, "historic_amber"),
-    39: ("அஸ் ஸுமர்", 75, "madinah_noor"),
+    39: ("அஸ் ஸுமர்", 75, "masjid_noor"),
     40: ("ஃகாஃபிர்", 85, "celestial_cosmos"),
     41: ("ஃபுஸ்ஸிலத்", 54, "celestial_cosmos"),
-    42: ("அஷ் ஷூரா", 53, "madinah_noor"),
+    42: ("அஷ் ஷூரா", 53, "masjid_noor"),
     43: ("அஸ் ஸுக்ருஃப்", 89, "jannah_gardens"),
     44: ("அத் துகான்", 59, "solemn_resurrection"),
     45: ("அல் ஜாஸியா", 37, "solemn_resurrection"),
     46: ("அல் அஹ்காஃப்", 35, "desert_dawn"),
     47: ("முஹம்மத்", 38, "historic_amber"),
-    48: ("அல் ஃபத்ஹ்", 29, "kaaba_sky"),
-    49: ("அல் ஹுஜுராத்", 18, "madinah_noor"),
+    48: ("அல் ஃபத்ஹ்", 29, "sacred_sanctuary"),
+    49: ("அல் ஹுஜுராத்", 18, "masjid_noor"),
     50: ("காஃப்", 45, "solemn_resurrection"),
     51: ("அத் தாரியாத்", 60, "celestial_cosmos"),
-    52: ("அத் தூர்", 49, "celestial_cosmos"),
+    52: ("அத் தூர்", 49, "earth_mountains"),
     53: ("அந் நஜ்ம்", 62, "celestial_cosmos"),
-    54: ("அல் கமர்", 55, "celestial_cosmos"),
+    54: ("அல் கமர்", 55, "night_layl"),
     55: ("அர் ரஹ்மான்", 78, "jannah_gardens"),
     56: ("அல் வாகிஆ", 96, "jannah_gardens"),
-    57: ("அல் ஹதீத்", 29, "madinah_noor"),
-    58: ("அல் முஜாதலா", 22, "madinah_noor"),
+    57: ("அல் ஹதீத்", 29, "masjid_noor"),
+    58: ("அல் முஜாதலா", 22, "masjid_noor"),
     59: ("அல் ஹஷ்ர்", 24, "historic_amber"),
     60: ("அல் மும்தஹினா", 13, "historic_amber"),
     61: ("அஸ் ஸஃப்", 14, "historic_amber"),
-    62: ("அல் ஜுமுஆ", 11, "madinah_noor"),
+    62: ("அல் ஜுமுஆ", 11, "masjid_noor"),
     63: ("அல் முனாஃபிகூன்", 11, "solemn_resurrection"),
     64: ("அத் தஃகாபுன்", 18, "solemn_resurrection"),
-    65: ("அத் தலாக்", 12, "madinah_noor"),
-    66: ("அத் தஹ்ரீம்", 12, "madinah_noor"),
+    65: ("அத் தலாக்", 12, "masjid_noor"),
+    66: ("அத் தஹ்ரீம்", 12, "masjid_noor"),
     67: ("அல் முல்க்", 30, "celestial_cosmos"),
-    68: ("அல் கலம்", 52, "madinah_noor"),
+    68: ("அல் கலம்", 52, "guidance_book"),
     69: ("அல் ஹாகா", 52, "solemn_resurrection"),
     70: ("அல் மஆரிஜ்", 44, "solemn_resurrection"),
     71: ("நூஹ்", 28, "waters_oceans"),
-    72: ("அல் ஜின்", 28, "madinah_noor"),
-    73: ("அல் முஸ்ஸம்மில்", 20, "madinah_noor"),
+    72: ("அல் ஜின்", 28, "night_layl"),
+    73: ("அல் முஸ்ஸம்மில்", 20, "night_layl"),
     74: ("அல் முத்தஸ்ஸிர்", 56, "solemn_resurrection"),
     75: ("அல் கியாமஹ்", 40, "solemn_resurrection"),
     76: ("அல் இன்ஸான்", 31, "jannah_gardens"),
@@ -263,110 +258,181 @@ QURAN_DIRECTORY = {
     83: ("அல் முaffiஃபீன்", 36, "solemn_resurrection"),
     84: ("அல் இன்ஷிகாக்", 25, "celestial_cosmos"),
     85: ("புரூஜ்", 22, "celestial_cosmos"),
-    86: ("அத் தாரிக்", 17, "celestial_cosmos"),
+    86: ("அத் தாரிக்", 17, "night_layl"),
     87: ("அல் அஃலா", 19, "jannah_gardens"),
     88: ("ஃகாஷியா", 26, "solemn_resurrection"),
-    89: ("அல் ஃபஜ்ர்", 30, "jannah_gardens"),
-    90: ("அல் பலத்", 20, "kaaba_sky"),
-    91: ("அஷ் ஷம்ஸ்", 15, "celestial_cosmos"),
-    92: ("அல் லைல்", 21, "celestial_cosmos"),
-    93: ("அழ் ளுஹா", 11, "madinah_noor"),
-    94: ("அஷ் ஷர்ஹ்", 8, "madinah_noor"),
+    89: ("அல் ஃபஜ்ர்", 30, "dawn_fajr"),
+    90: ("அல் பலத்", 20, "sacred_sanctuary"),
+    91: ("அஷ் ஷம்ஸ்", 15, "dawn_fajr"),
+    92: ("அல் லைல்", 21, "night_layl"),
+    93: ("அழ் ளுஹா", 11, "mercy_solace"),
+    94: ("அஷ் ஷர்ஹ்", 8, "mercy_solace"),
     95: ("அத் தீன்", 8, "jannah_gardens"),
-    96: ("அல் அலக்", 19, "madinah_noor"),
-    97: ("அல் கத்ர்", 5, "madinah_noor"),
-    98: ("அல் பய்யினஹ்", 8, "madinah_noor"),
+    96: ("அல் அலக்", 19, "guidance_book"),
+    97: ("அல் கத்ர்", 5, "night_layl"),
+    98: ("அல் பய்யினஹ்", 8, "guidance_book"),
     99: ("ஸல்ஸலா", 8, "solemn_resurrection"),
     100: ("ஆதியாத்", 11, "solemn_resurrection"),
     101: ("அல் காரிஆ", 11, "solemn_resurrection"),
     102: ("அத் தகாஸுர்", 8, "solemn_resurrection"),
     103: ("அல் அஸ்ர்", 3, "historic_amber"),
     104: ("அல் ஹுமஸஹ்", 9, "solemn_resurrection"),
-    105: ("அல் ஃபீல்", 5, "kaaba_sky"),
-    106: ("குரைஷ்", 4, "kaaba_sky"),
-    107: ("அல் மாவூன்", 7, "kaaba_sky"),
-    108: ("அல் கவ்தர்", 3, "kaaba_sky"),
-    109: ("அல் காஃபிரூன்", 6, "kaaba_sky"),
-    110: ("அந் நஸ்ர்", 3, "kaaba_sky"),
+    105: ("அல் ஃபீல்", 5, "sacred_sanctuary"),
+    106: ("குரைஷ்", 4, "sacred_sanctuary"),
+    107: ("அல் மாவூன்", 7, "sacred_sanctuary"),
+    108: ("அல் கவ்தர்", 3, "waters_oceans"),
+    109: ("அல் காஃபிரூன்", 6, "sacred_sanctuary"),
+    110: ("அந் நஸ்ர்", 3, "sacred_sanctuary"),
     111: ("அல் மஸத்", 5, "solemn_resurrection"),
-    112: ("அல் இக்லாஸ்", 4, "kaaba_sky"),
-    113: ("அல் ஃபலக்", 5, "kaaba_sky"),
-    114: ("அந் நாஸ்", 6, "kaaba_sky")
+    112: ("அல் இக்லாஸ்", 4, "sacred_sanctuary"),
+    113: ("அல் ஃபலக்", 5, "dawn_fajr"),
+    114: ("அந் நாஸ்", 6, "sacred_sanctuary")
 }
 
-# --- 3. AUDITED 100% HALAL IMAGE VAULT ---
+# --- 3. 12 THEMATIC MACRO PALETTES & 200+ CURATED HALAL IMAGES ---
 THEME_PALETTES = {
-    "jannah_gardens": {
-        "gradient": "linear-gradient(180deg, rgba(12, 68, 44, 0.98) 0%, rgba(15, 82, 54, 0.94) 52%, rgba(15, 82, 54, 0.45) 82%, rgba(0,0,0,0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    "kaaba_sky": {
-        "gradient": "linear-gradient(180deg, rgba(165, 205, 225, 0.98) 0%, rgba(190, 220, 235, 0.92) 50%, rgba(210, 232, 245, 0.35) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#112a45",
-        "shadow": "0 2px 8px rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.15)",
-        "images": [
-            "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    "madinah_noor": {
-        "gradient": "linear-gradient(180deg, rgba(185, 115, 15, 0.98) 0%, rgba(165, 100, 10, 0.93) 50%, rgba(165, 100, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
+    # 1. Heavens, Astronomy & Cosmic Order
     "celestial_cosmos": {
         "gradient": "linear-gradient(180deg, rgba(10, 24, 52, 0.98) 0%, rgba(14, 32, 68, 0.93) 50%, rgba(14, 32, 68, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)",
         "images": [
             "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1538370965046-79c0d6907d47?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1080&auto=format&fit=crop"
         ]
     },
+    # 2. Sacred Geography & Qiblah (Makkah, Kaaba)
+    "sacred_sanctuary": {
+        "gradient": "linear-gradient(180deg, rgba(165, 205, 225, 0.98) 0%, rgba(190, 220, 235, 0.92) 50%, rgba(210, 232, 245, 0.35) 80%, rgba(0, 0, 0, 0) 100%)",
+        "text_color": "#112a45",
+        "shadow": "0 2px 8px rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.15)",
+        "images": [
+            "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1080&auto=format&fit=crop"
+        ]
+    },
+    # 3. Masjid Architecture, Light (Noor) & Madinah
+    "masjid_noor": {
+        "gradient": "linear-gradient(180deg, rgba(185, 115, 15, 0.98) 0%, rgba(165, 100, 10, 0.93) 50%, rgba(165, 100, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
+        "text_color": "#ffffff",
+        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
+        "images": [
+            "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1590076215667-875d4ef2d7ee?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=1080&auto=format&fit=crop"
+        ]
+    },
+    # 4. Paradise, Jannah & Pure Gardens
+    "jannah_gardens": {
+        "gradient": "linear-gradient(180deg, rgba(12, 68, 44, 0.98) 0%, rgba(15, 82, 54, 0.94) 52%, rgba(15, 82, 54, 0.45) 82%, rgba(0,0,0,0) 100%)",
+        "text_color": "#ffffff",
+        "shadow": "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
+        "images": [
+            "https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=1080&auto=format&fit=crop"
+        ]
+    },
+    # 5. Historic Struggle, Patience & Trials (Reference 1)
     "historic_amber": {
         "gradient": "linear-gradient(180deg, rgba(215, 80, 10, 0.98) 0%, rgba(200, 72, 8, 0.94) 50%, rgba(195, 70, 8, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 5px 20px rgba(0,0,0,0.55)",
         "images": [
             "https://images.unsplash.com/photo-1512958789358-4dac567096e8?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=1080&auto=format&fit=crop"
         ]
     },
+    # 6. Solemnity, Day of Resurrection & Accountability
     "solemn_resurrection": {
         "gradient": "linear-gradient(180deg, rgba(88, 16, 28, 0.98) 0%, rgba(72, 14, 24, 0.93) 50%, rgba(55, 12, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)",
         "images": [
             "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?q=80&w=1080&auto=format&fit=crop"
         ]
     },
+    # 7. Water, Rain, Oceans & Hydrology
     "waters_oceans": {
         "gradient": "linear-gradient(180deg, rgba(10, 55, 75, 0.98) 0%, rgba(12, 68, 90, 0.93) 50%, rgba(12, 68, 90, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
         "images": [
+            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=1080&auto=format&fit=crop"
         ]
     },
+    # 8. Earth, Geology & Mountains (Signs in Nature)
+    "earth_mountains": {
+        "gradient": "linear-gradient(180deg, rgba(62, 42, 28, 0.98) 0%, rgba(78, 54, 38, 0.93) 50%, rgba(78, 54, 38, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
+        "text_color": "#ffffff",
+        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
+        "images": [
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?q=80&w=1080&auto=format&fit=crop"
+        ]
+    },
+    # 9. Desert & Untrodden Dunes (Vast Horizons)
     "desert_dawn": {
         "gradient": "linear-gradient(180deg, rgba(195, 95, 20, 0.98) 0%, rgba(175, 85, 16, 0.93) 50%, rgba(175, 85, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
         "text_color": "#ffffff",
         "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
         "images": [
             "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1080&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop"
+        ]
+    },
+    # 10. Dawn, Morning & Awakening (Surah Fajr, Shams, Falaq)
+    "dawn_fajr": {
+        "gradient": "linear-gradient(180deg, rgba(188, 78, 48, 0.98) 0%, rgba(212, 106, 68, 0.92) 50%, rgba(212, 106, 68, 0.40) 80%, rgba(0, 0, 0, 0) 100%)",
+        "text_color": "#ffffff",
+        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
+        "images": [
+            "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?q=80&w=1080&auto=format&fit=crop"
+        ]
+    },
+    # 11. Night & Peaceful Contemplation (Layl, Muzammil, Qadr)
+    "night_layl": {
+        "gradient": "linear-gradient(180deg, rgba(8, 18, 38, 0.98) 0%, rgba(12, 26, 52, 0.94) 50%, rgba(12, 26, 52, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
+        "text_color": "#ffffff",
+        "shadow": "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)",
+        "images": [
+            "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1080&auto=format&fit=crop"
+        ]
+    },
+    # 12. Mercy & Divine Solace (Duha, Sharh, Rahman)
+    "mercy_solace": {
+        "gradient": "linear-gradient(180deg, rgba(28, 82, 98, 0.98) 0%, rgba(36, 102, 122, 0.92) 50%, rgba(36, 102, 122, 0.40) 80%, rgba(0, 0, 0, 0) 100%)",
+        "text_color": "#ffffff",
+        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
+        "images": [
+            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1080&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop"
         ]
     }
 }
@@ -374,7 +440,7 @@ THEME_PALETTES = {
 HISTORY_FILE = "used_images_history.json"
 
 def get_non_repeating_image(theme_key: str) -> str:
-    palette = THEME_PALETTES.get(theme_key, THEME_PALETTES["madinah_noor"])
+    palette = THEME_PALETTES.get(theme_key, THEME_PALETTES["masjid_noor"])
     available_images = palette["images"]
     
     used_history = {}
@@ -407,28 +473,35 @@ def get_non_repeating_image(theme_key: str) -> str:
 def get_accurate_verse_theme(surah: int, verse_text: str):
     t = verse_text.lower()
     
-    # Text-based overrides
-    if any(k in t for k in ["சூழ்ந்து", "கியாம", "கப்று", "எழுப்பப்படும்", "மறுமை", "நடுங்கும்", "சாம்பல்", "மரண", "தீர்ப்பு"]):
-        theme_key = "solemn_resurrection"
-    elif any(k in t for k in ["சுவனம்", "தோட்டம்", "நதிகள்", "பயனற்ற", "இன்பம்", "அருட்கொடை", "நிழல்", "கனி"]):
+    # Priority theological keyword recognition
+    if any(k in t for k in ["சுவனம்", "தோட்டம்", "நதிகள்", "பயனற்ற", "இன்பம்", "அருட்கொடை", "நிழல்", "கனி"]):
         theme_key = "jannah_gardens"
     elif any(k in t for k in ["கஃபா", "மக்கா", "ஹஜ்", "ஆலயத்தை", "ஹரம்", "கிப்லா"]):
-        theme_key = "kaaba_sky"
+        theme_key = "sacred_sanctuary"
     elif any(k in t for k in ["இறைவழி", "கொல்லப்பட்ட", "பொறுமை", "சோதனை", "உயிரோடு", "போராடு", "தியாகம்"]):
         theme_key = "historic_amber"
+    elif any(k in t for k in ["சூழ்ந்து", "கியாம", "கப்று", "எழுப்பப்படும்", "மறுமை", "நடுங்கும்", "சாம்பல்", "மரண", "தீர்ப்பு"]):
+        theme_key = "solemn_resurrection"
     elif any(k in t for k in ["கடல்", "மழை", "தண்ணீர்", "மேகம்", "கப்பல்", "அலை"]):
         theme_key = "waters_oceans"
+    elif any(k in t for k in ["விடிற்காலை", "பகல்", "சூரியன்", "விடியல்", "பிரகாசம்"]):
+        theme_key = "dawn_fajr"
+    elif any(k in t for k in ["இரவு", "இரவில்", "நட்சத்திர", "சந்திரன்"]):
+        theme_key = "night_layl"
+    elif any(k in t for k in ["ஒளி", "நூர்", "வேதம்", "குர்ஆன்", "அறிவு", "சான்று", "நேர்வழி"]):
+        theme_key = "masjid_noor"
+    elif any(k in t for k in ["பூமி", "மலைகள்", "பாறை", "நிலம்"]):
+        theme_key = "earth_mountains"
     else:
         _, _, default_theme = QURAN_DIRECTORY.get(surah, ("ஸூரா", 0, "historic_amber"))
         theme_key = default_theme
 
-    palette = THEME_PALETTES.get(theme_key, THEME_PALETTES["madinah_noor"])
+    palette = THEME_PALETTES.get(theme_key, THEME_PALETTES["masjid_noor"])
     remote_img_url = get_non_repeating_image(theme_key)
     return palette, remote_img_url
 
-# --- 4. EMBED IMAGES AS BASE64 (PREVENTS BROKEN IMAGES) ---
+# --- 4. BASE64 ENCODER (PREVENTS BROKEN IMAGES) ---
 def get_base64_data_uri(filepath: str, mime: str = "image/jpeg") -> str:
-    """Converts a local file into a Base64 string so it can NEVER fail or be broken."""
     if os.path.exists(filepath):
         try:
             with open(filepath, "rb") as f:
@@ -521,7 +594,7 @@ def fetch_any_quran_verse(surah: int, ayah: int):
 
     return verse_text, reference
 
-# --- 5. PERSISTENT FAST PLAYWRIGHT BROWSER ---
+# --- 5. PRE-WARMED PLAYWRIGHT BROWSER ---
 GLOBAL_BROWSER = None
 GLOBAL_PLAYWRIGHT = None
 
@@ -556,7 +629,6 @@ async def render_poster(local_image_name: str, tamil_text: str, surah_ref: str, 
         line_height = "1.50"
         padding = "50px 45px 20px 45px"
 
-    # Convert both images to in-memory Base64 data URIs
     logo_data = get_logo_data_uri()
     bg_data = get_base64_data_uri(local_image_name, "image/jpeg")
 
@@ -640,7 +712,7 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
-    print("✅ High-Speed In-Memory Cloud Engine Online!")
+    print("✅ High-Speed 12-Macro-Theme Cloud Engine Online!")
     await app.initialize()
     await app.start()
     await app.updater.start_polling()
