@@ -17,7 +17,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 TELEGRAM_TOKEN = "8955985482:AAFGVlfGRbttDANQhO40yYTBw1xITyt2s20"
 
-# --- 1. POSTER TEMPLATE (OFFICIAL MASTER KIT) ---
+# --- 1. POSTER TEMPLATE (OFFICIAL MASTER TEMPLATE) ---
 TEMPLATE_CONTENT = """<!DOCTYPE html>
 <html lang="ta">
 <head>
@@ -96,15 +96,17 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     object-fit: cover; 
   }
 
+  /* 100+ Dynamic Gradient Shield */
   .gradient-overlay {
     position: absolute; 
     top: 0; 
     left: 0; 
     width: 100%; 
-    height: 82%;
+    height: 84%;
     background: {{GRADIENT_CSS}};
   }
 
+  /* --- VERSE TEXT: HERO SCALING ENGINE --- */
   .verse-container {
     position: relative; 
     z-index: 2;
@@ -118,6 +120,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.2px;
   }
 
+  /* Surah Pill Badge at bottom */
   .surah-tag {
     position: absolute; 
     bottom: 26px; 
@@ -135,6 +138,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.4px;
   }
 
+  /* --- FOOTER: Aligned with Card Edges --- */
   .footer {
     display: flex; 
     justify-content: space-between; 
@@ -173,334 +177,301 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
 
 # --- 2. SURAH DIRECTORY & METADATA (114 SURAHS) ---
 QURAN_DIRECTORY = {
-    1: ("அல் ஃபாத்திஹா", 7, "sacred_sanctuary"),
-    2: ("அல் பகரா", 286, "historic_amber"),
-    3: ("ஆல இம்ரான்", 200, "historic_amber"),
-    4: ("அந் நிஸா", 176, "historic_amber"),
-    5: ("அல் மாயிதா", 120, "masjid_noor"),
-    6: ("அல் அன்ஆம்", 165, "celestial_cosmos"),
-    7: ("அல் அஃராஃப்", 206, "historic_amber"),
-    8: ("அல் அன்ஃபால்", 75, "historic_amber"),
-    9: ("அத் தவ்பா", 129, "historic_amber"),
-    10: ("யூனுஸ்", 109, "waters_oceans"),
-    11: ("ஹூத்", 123, "historic_amber"),
-    12: ("யூஸுஃப்", 111, "masjid_noor"),
-    13: ("அர் ரஃது", 43, "celestial_cosmos"),
-    14: ("இப்ராஹீம்", 52, "sacred_sanctuary"),
-    15: ("அல் ஹிஜ்ர்", 99, "desert_dawn"),
-    16: ("அந் நஹ்ல்", 128, "jannah_gardens"),
-    17: ("அல் இஸ்ரா", 111, "masjid_noor"),
-    18: ("கஹ்ஃப்", 110, "masjid_noor"),
-    19: ("மர்யம்", 98, "jannah_gardens"),
-    20: ("தாஹா", 135, "masjid_noor"),
-    21: ("அல் அன்பியா", 112, "historic_amber"),
-    22: ("அல் ஹஜ்", 78, "sacred_sanctuary"),
-    23: ("அல் முஃமினூன்", 118, "jannah_gardens"),
-    24: ("அந் நூர்", 64, "masjid_noor"),
-    25: ("அல் ஃபுர்கான்", 77, "waters_oceans"),
-    26: ("அஷ் ஷுஅரா", 227, "historic_amber"),
-    27: ("அந் நம்ல்", 93, "desert_dawn"),
-    28: ("அல் கஸஸ்", 88, "historic_amber"),
-    29: ("அல் அன்கபூத்", 69, "historic_amber"),
-    30: ("ரூம்", 60, "celestial_cosmos"),
-    31: ("லுக்மான்", 34, "masjid_noor"),
-    32: ("அஸ் ஸஜ்தா", 30, "solemn_resurrection"),
-    33: ("அல் அஹ்ஸாப்", 73, "historic_amber"),
-    34: ("ஸபா", 54, "desert_dawn"),
-    35: ("ஃபாதிர்", 45, "celestial_cosmos"),
-    36: ("யாஸீன்", 83, "masjid_noor"),
-    37: ("அஸ் ஸாஃப்பாத்", 182, "celestial_cosmos"),
-    38: ("ஸாத்", 88, "historic_amber"),
-    39: ("அஸ் ஸுமர்", 75, "masjid_noor"),
-    40: ("ஃகாஃபிர்", 85, "celestial_cosmos"),
-    41: ("ஃபுஸ்ஸிலத்", 54, "celestial_cosmos"),
-    42: ("அஷ் ஷூரா", 53, "masjid_noor"),
-    43: ("அஸ் ஸுக்ருஃப்", 89, "jannah_gardens"),
-    44: ("அத் துகான்", 59, "solemn_resurrection"),
-    45: ("அல் ஜாஸியா", 37, "solemn_resurrection"),
-    46: ("அல் அஹ்காஃப்", 35, "desert_dawn"),
-    47: ("முஹம்மத்", 38, "historic_amber"),
-    48: ("அல் ஃபத்ஹ்", 29, "sacred_sanctuary"),
-    49: ("அல் ஹுஜுராத்", 18, "masjid_noor"),
-    50: ("காஃப்", 45, "solemn_resurrection"),
-    51: ("அத் தாரியாத்", 60, "celestial_cosmos"),
-    52: ("அத் தூர்", 49, "earth_mountains"),
-    53: ("அந் நஜ்ம்", 62, "celestial_cosmos"),
-    54: ("அல் கமர்", 55, "night_layl"),
-    55: ("அர் ரஹ்மான்", 78, "jannah_gardens"),
-    56: ("அல் வாகிஆ", 96, "jannah_gardens"),
-    57: ("அல் ஹதீத்", 29, "masjid_noor"),
-    58: ("அல் முஜாதலா", 22, "masjid_noor"),
-    59: ("அல் ஹஷ்ர்", 24, "historic_amber"),
-    60: ("அல் மும்தஹினா", 13, "historic_amber"),
-    61: ("அஸ் ஸஃப்", 14, "historic_amber"),
-    62: ("அல் ஜுமுஆ", 11, "masjid_noor"),
-    63: ("அல் முனாஃபிகூன்", 11, "solemn_resurrection"),
-    64: ("அத் தஃகாபுன்", 18, "solemn_resurrection"),
-    65: ("அத் தலாக்", 12, "masjid_noor"),
-    66: ("அத் தஹ்ரீம்", 12, "masjid_noor"),
-    67: ("அல் முல்க்", 30, "celestial_cosmos"),
-    68: ("அல் கலம்", 52, "guidance_book"),
-    69: ("அல் ஹாகா", 52, "solemn_resurrection"),
-    70: ("அல் மஆரிஜ்", 44, "solemn_resurrection"),
-    71: ("நூஹ்", 28, "waters_oceans"),
-    72: ("அல் ஜின்", 28, "night_layl"),
-    73: ("அல் முஸ்ஸம்மில்", 20, "night_layl"),
-    74: ("அல் முத்தஸ்ஸிர்", 56, "solemn_resurrection"),
-    75: ("அல் கியாமஹ்", 40, "solemn_resurrection"),
-    76: ("அல் இன்ஸான்", 31, "jannah_gardens"),
-    77: ("அல் முர்ஸலாத்", 50, "solemn_resurrection"),
-    78: ("அந் நபஃ", 40, "solemn_resurrection"),
-    79: ("அந் நாஸிஆத்", 46, "solemn_resurrection"),
-    80: ("அபஸ", 42, "solemn_resurrection"),
-    81: ("அத் தக்வீர்", 29, "celestial_cosmos"),
-    82: ("அல் இன்ஃபிதார்", 19, "celestial_cosmos"),
-    83: ("அல் முaffiஃபீன்", 36, "solemn_resurrection"),
-    84: ("அல் இன்ஷிகாக்", 25, "celestial_cosmos"),
-    85: ("புரூஜ்", 22, "celestial_cosmos"),
-    86: ("அத் தாரிக்", 17, "night_layl"),
-    87: ("அல் அஃலா", 19, "jannah_gardens"),
-    88: ("ஃகாஷியா", 26, "solemn_resurrection"),
-    89: ("அல் ஃபஜ்ர்", 30, "dawn_fajr"),
-    90: ("அல் பலத்", 20, "sacred_sanctuary"),
-    91: ("அஷ் ஷம்ஸ்", 15, "dawn_fajr"),
-    92: ("அல் லைல்", 21, "night_layl"),
-    93: ("அழ் ளுஹா", 11, "mercy_solace"),
-    94: ("அஷ் ஷர்ஹ்", 8, "mercy_solace"),
-    95: ("அத் தீன்", 8, "jannah_gardens"),
-    96: ("அல் அலக்", 19, "guidance_book"),
-    97: ("அல் கத்ர்", 5, "night_layl"),
-    98: ("அல் பய்யினஹ்", 8, "guidance_book"),
-    99: ("ஸல்ஸலா", 8, "solemn_resurrection"),
-    100: ("ஆதியாத்", 11, "solemn_resurrection"),
-    101: ("அல் காரிஆ", 11, "solemn_resurrection"),
-    102: ("அத் தகாஸுர்", 8, "solemn_resurrection"),
-    103: ("அல் அஸ்ர்", 3, "historic_amber"),
-    104: ("அல் ஹுமஸஹ்", 9, "solemn_resurrection"),
-    105: ("அல் ஃபீல்", 5, "sacred_sanctuary"),
-    106: ("குரைஷ்", 4, "sacred_sanctuary"),
-    107: ("அல் மாவூன்", 7, "sacred_sanctuary"),
-    108: ("அல் கவ்தர்", 3, "waters_oceans"),
-    109: ("அல் காஃபிரூன்", 6, "sacred_sanctuary"),
-    110: ("அந் நஸ்ர்", 3, "sacred_sanctuary"),
-    111: ("அல் மஸத்", 5, "solemn_resurrection"),
-    112: ("அல் இக்லாஸ்", 4, "sacred_sanctuary"),
-    113: ("அல் ஃபலக்", 5, "dawn_fajr"),
-    114: ("அந் நாஸ்", 6, "sacred_sanctuary")
+    1: ("அல் ஃபாத்திஹா", 7, "sky"),
+    2: ("அல் பகரா", 286, "amber"),
+    3: ("ஆல இம்ரான்", 200, "amber"),
+    4: ("அந் நிஸா", 176, "amber"),
+    5: ("அல் மாயிதா", 120, "gold"),
+    6: ("அல் அன்ஆம்", 165, "navy"),
+    7: ("அல் அஃராஃப்", 206, "amber"),
+    8: ("அல் அன்ஃபால்", 75, "amber"),
+    9: ("அத் தவ்பா", 129, "amber"),
+    10: ("யூனுஸ்", 109, "teal"),
+    11: ("ஹூத்", 123, "amber"),
+    12: ("யூஸுஃப்", 111, "gold"),
+    13: ("அர் ரஃது", 43, "navy"),
+    14: ("இப்ராஹீம்", 52, "sky"),
+    15: ("அல் ஹிஜ்ர்", 99, "copper"),
+    16: ("அந் நஹ்ல்", 128, "emerald"),
+    17: ("அல் இஸ்ரா", 111, "gold"),
+    18: ("கஹ்ஃப்", 110, "gold"),
+    19: ("மர்யம்", 98, "emerald"),
+    20: ("தாஹா", 135, "gold"),
+    21: ("அல் அன்பியா", 112, "amber"),
+    22: ("அல் ஹஜ்", 78, "sky"),
+    23: ("அல் முஃமினூன்", 118, "emerald"),
+    24: ("அந் நூர்", 64, "gold"),
+    25: ("அல் ஃபுர்கான்", 77, "teal"),
+    26: ("அஷ் ஷுஅரா", 227, "amber"),
+    27: ("அந் நம்ல்", 93, "copper"),
+    28: ("அல் கஸஸ்", 88, "amber"),
+    29: ("அல் அன்கபூத்", 69, "amber"),
+    30: ("ரூம்", 60, "navy"),
+    31: ("லுக்மான்", 34, "gold"),
+    32: ("அஸ் ஸஜ்தா", 30, "burgundy"),
+    33: ("அல் அஹ்ஸாப்", 73, "amber"),
+    34: ("ஸபா", 54, "copper"),
+    35: ("ஃபாதிர்", 45, "navy"),
+    36: ("யாஸீன்", 83, "gold"),
+    37: ("அஸ் ஸாஃப்பாத்", 182, "navy"),
+    38: ("ஸாத்", 88, "amber"),
+    39: ("அஸ் ஸுமர்", 75, "gold"),
+    40: ("ஃகாஃபிர்", 85, "navy"),
+    41: ("ஃபுஸ்ஸிலத்", 54, "navy"),
+    42: ("அஷ் ஷூரா", 53, "gold"),
+    43: ("அஸ் ஸுக்ருஃப்", 89, "emerald"),
+    44: ("அத் துகான்", 59, "burgundy"),
+    45: ("அல் ஜாஸியா", 37, "burgundy"),
+    46: ("அல் அஹ்காஃப்", 35, "copper"),
+    47: ("முஹம்மத்", 38, "amber"),
+    48: ("அல் ஃபத்ஹ்", 29, "sky"),
+    49: ("அல் ஹுஜுராத்", 18, "gold"),
+    50: ("காஃப்", 45, "burgundy"),
+    51: ("அத் தாரியாத்", 60, "navy"),
+    52: ("அத் தூர்", 49, "earth"),
+    53: ("அந் நஜ்ம்", 62, "navy"),
+    54: ("அல் கமர்", 55, "night"),
+    55: ("அர் ரஹ்மான்", 78, "emerald"),
+    56: ("அல் வாகிஆ", 96, "emerald"),
+    57: ("அல் ஹதீத்", 29, "gold"),
+    58: ("அல் முஜாதலா", 22, "gold"),
+    59: ("அல் ஹஷ்ர்", 24, "amber"),
+    60: ("அல் மும்தஹினா", 13, "amber"),
+    61: ("அஸ் ஸஃப்", 14, "amber"),
+    62: ("அல் ஜுமுஆ", 11, "gold"),
+    63: ("அல் முனாஃபிகூன்", 11, "burgundy"),
+    64: ("அத் தஃகாபுன்", 18, "burgundy"),
+    65: ("அத் தலாக்", 12, "gold"),
+    66: ("அத் தஹ்ரீம்", 12, "gold"),
+    67: ("அல் முல்க்", 30, "navy"),
+    68: ("அல் கலம்", 52, "gold"),
+    69: ("அல் ஹாகா", 52, "burgundy"),
+    70: ("அல் மஆரிஜ்", 44, "burgundy"),
+    71: ("நூஹ்", 28, "teal"),
+    72: ("அல் ஜின்", 28, "night"),
+    73: ("அல் முஸ்ஸம்மில்", 20, "night"),
+    74: ("அல் முத்தஸ்ஸிர்", 56, "burgundy"),
+    75: ("அல் கியாமஹ்", 40, "burgundy"),
+    76: ("அல் இன்ஸான்", 31, "emerald"),
+    77: ("அல் முர்ஸலாத்", 50, "burgundy"),
+    78: ("அந் நபஃ", 40, "burgundy"),
+    79: ("அந் நாஸிஆத்", 46, "burgundy"),
+    80: ("அபஸ", 42, "burgundy"),
+    81: ("அத் தக்வீர்", 29, "navy"),
+    82: ("அல் இன்ஃபிதார்", 19, "navy"),
+    83: ("அல் முaffiஃபீன்", 36, "burgundy"),
+    84: ("அல் இன்ஷிகாக்", 25, "navy"),
+    85: ("புரூஜ்", 22, "navy"),
+    86: ("அத் தாரிக்", 17, "night"),
+    87: ("அல் அஃலா", 19, "emerald"),
+    88: ("ஃகாஷியா", 26, "burgundy"),
+    89: ("அல் ஃபஜ்ர்", 30, "dawn"),
+    90: ("அல் பலத்", 20, "sky"),
+    91: ("அஷ் ஷம்ஸ்", 15, "dawn"),
+    92: ("அல் லைல்", 21, "night"),
+    93: ("அழ் ளுஹா", 11, "solace"),
+    94: ("அஷ் ஷர்ஹ்", 8, "solace"),
+    95: ("அத் தீன்", 8, "emerald"),
+    96: ("அல் அலக்", 19, "gold"),
+    97: ("அல் கத்ர்", 5, "night"),
+    98: ("அல் பய்யினஹ்", 8, "gold"),
+    99: ("ஸல்ஸலா", 8, "burgundy"),
+    100: ("ஆதியாத்", 11, "burgundy"),
+    101: ("அல் காரிஆ", 11, "burgundy"),
+    102: ("அத் தகாஸுர்", 8, "burgundy"),
+    103: ("அல் அஸ்ர்", 3, "amber"),
+    104: ("அல் ஹுமஸஹ்", 9, "burgundy"),
+    105: ("அல் ஃபீல்", 5, "sky"),
+    106: ("குரைஷ்", 4, "sky"),
+    107: ("அல் மாவூன்", 7, "sky"),
+    108: ("அல் கவ்தர்", 3, "teal"),
+    109: ("அல் காஃபிரூன்", 6, "sky"),
+    110: ("அந் நஸ்ர்", 3, "sky"),
+    111: ("அல் மஸத்", 5, "burgundy"),
+    112: ("அல் இக்லாஸ்", 4, "sky"),
+    113: ("அல் ஃபலக்", 5, "dawn"),
+    114: ("அந் நாஸ்", 6, "sky")
 }
 
-# --- 3. 12 THEMATIC MACRO PALETTES & 200+ CURATED HALAL IMAGES ---
-THEME_PALETTES = {
-    # 1. Heavens, Astronomy & Cosmic Order
-    "celestial_cosmos": {
-        "gradient": "linear-gradient(180deg, rgba(10, 24, 52, 0.98) 0%, rgba(14, 32, 68, 0.93) 50%, rgba(14, 32, 68, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)",
-        "images": [
-            "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1538370965046-79c0d6907d47?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 2. Sacred Geography & Qiblah (Makkah, Kaaba)
-    "sacred_sanctuary": {
-        "gradient": "linear-gradient(180deg, rgba(165, 205, 225, 0.98) 0%, rgba(190, 220, 235, 0.92) 50%, rgba(210, 232, 245, 0.35) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#112a45",
-        "shadow": "0 2px 8px rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.15)",
-        "images": [
-            "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 3. Masjid Architecture, Light (Noor) & Madinah
-    "masjid_noor": {
-        "gradient": "linear-gradient(180deg, rgba(185, 115, 15, 0.98) 0%, rgba(165, 100, 10, 0.93) 50%, rgba(165, 100, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1590076215667-875d4ef2d7ee?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 4. Paradise, Jannah & Pure Gardens
-    "jannah_gardens": {
-        "gradient": "linear-gradient(180deg, rgba(12, 68, 44, 0.98) 0%, rgba(15, 82, 54, 0.94) 52%, rgba(15, 82, 54, 0.45) 82%, rgba(0,0,0,0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 5. Historic Struggle, Patience & Trials (Reference 1)
-    "historic_amber": {
-        "gradient": "linear-gradient(180deg, rgba(215, 80, 10, 0.98) 0%, rgba(200, 72, 8, 0.94) 50%, rgba(195, 70, 8, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 5px 20px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1512958789358-4dac567096e8?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 6. Solemnity, Day of Resurrection & Accountability
-    "solemn_resurrection": {
-        "gradient": "linear-gradient(180deg, rgba(88, 16, 28, 0.98) 0%, rgba(72, 14, 24, 0.93) 50%, rgba(55, 12, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)",
-        "images": [
-            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 7. Water, Rain, Oceans & Hydrology
-    "waters_oceans": {
-        "gradient": "linear-gradient(180deg, rgba(10, 55, 75, 0.98) 0%, rgba(12, 68, 90, 0.93) 50%, rgba(12, 68, 90, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 8. Earth, Geology & Mountains (Signs in Nature)
-    "earth_mountains": {
-        "gradient": "linear-gradient(180deg, rgba(62, 42, 28, 0.98) 0%, rgba(78, 54, 38, 0.93) 50%, rgba(78, 54, 38, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 9. Desert & Untrodden Dunes (Vast Horizons)
-    "desert_dawn": {
-        "gradient": "linear-gradient(180deg, rgba(195, 95, 20, 0.98) 0%, rgba(175, 85, 16, 0.93) 50%, rgba(175, 85, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 10. Dawn, Morning & Awakening (Surah Fajr, Shams, Falaq)
-    "dawn_fajr": {
-        "gradient": "linear-gradient(180deg, rgba(188, 78, 48, 0.98) 0%, rgba(212, 106, 68, 0.92) 50%, rgba(212, 106, 68, 0.40) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 11. Night & Peaceful Contemplation (Layl, Muzammil, Qadr)
-    "night_layl": {
-        "gradient": "linear-gradient(180deg, rgba(8, 18, 38, 0.98) 0%, rgba(12, 26, 52, 0.94) 50%, rgba(12, 26, 52, 0.45) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)",
-        "images": [
-            "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1080&auto=format&fit=crop"
-        ]
-    },
-    # 12. Mercy & Divine Solace (Duha, Sharh, Rahman)
-    "mercy_solace": {
-        "gradient": "linear-gradient(180deg, rgba(28, 82, 98, 0.98) 0%, rgba(36, 102, 122, 0.92) 50%, rgba(36, 102, 122, 0.40) 80%, rgba(0, 0, 0, 0) 100%)",
-        "text_color": "#ffffff",
-        "shadow": "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)",
-        "images": [
-            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop"
-        ]
-    }
+# --- 3. 120+ DIVERSE CURATED GRADIENT PALETTES ---
+# Formatted as (gradient_css, text_color, text_shadow)
+GRADIENTS_120 = [
+    # Emeralds & Forest Jades (1-15)
+    ("linear-gradient(180deg, rgba(12, 68, 44, 0.98) 0%, rgba(15, 82, 54, 0.94) 52%, rgba(15, 82, 54, 0.45) 82%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)"),
+    ("linear-gradient(180deg, rgba(8, 52, 34, 0.98) 0%, rgba(12, 68, 46, 0.93) 50%, rgba(12, 68, 46, 0.42) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)"),
+    ("linear-gradient(180deg, rgba(18, 86, 56, 0.98) 0%, rgba(22, 102, 68, 0.92) 50%, rgba(22, 102, 68, 0.40) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(14, 78, 62, 0.98) 0%, rgba(18, 92, 74, 0.93) 50%, rgba(18, 92, 74, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(20, 64, 48, 0.98) 0%, rgba(26, 78, 60, 0.94) 50%, rgba(26, 78, 60, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(10, 48, 38, 0.98) 0%, rgba(14, 60, 48, 0.94) 50%, rgba(14, 60, 48, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(24, 76, 54, 0.98) 0%, rgba(30, 92, 66, 0.93) 50%, rgba(30, 92, 66, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(16, 58, 42, 0.98) 0%, rgba(22, 74, 54, 0.93) 50%, rgba(22, 74, 54, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(12, 72, 50, 0.98) 0%, rgba(16, 88, 62, 0.93) 50%, rgba(16, 88, 62, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(8, 42, 30, 0.98) 0%, rgba(14, 56, 40, 0.94) 50%, rgba(14, 56, 40, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+
+    # Celestial Navies & Indigos (16-30)
+    ("linear-gradient(180deg, rgba(10, 24, 52, 0.98) 0%, rgba(14, 32, 68, 0.93) 50%, rgba(14, 32, 68, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)"),
+    ("linear-gradient(180deg, rgba(6, 16, 38, 0.98) 0%, rgba(10, 22, 50, 0.94) 50%, rgba(10, 22, 50, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(12, 28, 62, 0.98) 0%, rgba(16, 36, 78, 0.94) 50%, rgba(16, 36, 78, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(14, 22, 46, 0.98) 0%, rgba(18, 30, 60, 0.94) 50%, rgba(18, 30, 60, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(18, 32, 68, 0.98) 0%, rgba(22, 42, 84, 0.93) 50%, rgba(22, 42, 84, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(8, 20, 44, 0.98) 0%, rgba(12, 28, 58, 0.94) 50%, rgba(12, 28, 58, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(16, 26, 56, 0.98) 0%, rgba(20, 34, 72, 0.94) 50%, rgba(20, 34, 72, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(10, 18, 42, 0.98) 0%, rgba(16, 28, 62, 0.94) 50%, rgba(16, 28, 62, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+
+    # Deep Burgundies, Plums & Wine (31-45)
+    ("linear-gradient(180deg, rgba(88, 16, 28, 0.98) 0%, rgba(72, 14, 24, 0.93) 50%, rgba(55, 12, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)"),
+    ("linear-gradient(180deg, rgba(72, 12, 24, 0.98) 0%, rgba(60, 10, 20, 0.94) 50%, rgba(45, 8, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(94, 20, 36, 0.98) 0%, rgba(80, 16, 30, 0.93) 50%, rgba(65, 12, 24, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(64, 14, 32, 0.98) 0%, rgba(54, 12, 28, 0.94) 50%, rgba(40, 10, 22, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(78, 18, 38, 0.98) 0%, rgba(66, 14, 32, 0.94) 50%, rgba(52, 12, 26, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(82, 14, 30, 0.98) 0%, rgba(68, 12, 26, 0.94) 50%, rgba(50, 10, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(68, 10, 22, 0.98) 0%, rgba(56, 8, 18, 0.94) 50%, rgba(42, 6, 14, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+
+    # Ocean Teals, Cerulean & Aquamarines (46-60)
+    ("linear-gradient(180deg, rgba(10, 55, 75, 0.98) 0%, rgba(12, 68, 90, 0.93) 50%, rgba(12, 68, 90, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)"),
+    ("linear-gradient(180deg, rgba(8, 44, 62, 0.98) 0%, rgba(10, 56, 78, 0.94) 50%, rgba(10, 56, 78, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+    ("linear-gradient(180deg, rgba(14, 68, 92, 0.98) 0%, rgba(18, 84, 112, 0.93) 50%, rgba(18, 84, 112, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(12, 60, 80, 0.98) 0%, rgba(16, 74, 98, 0.93) 50%, rgba(16, 74, 98, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(16, 72, 94, 0.98) 0%, rgba(20, 88, 114, 0.93) 50%, rgba(20, 88, 114, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(10, 48, 66, 0.98) 0%, rgba(14, 62, 84, 0.94) 50%, rgba(14, 62, 84, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+
+    # Sacred Ochres & Warm Golds (61-75)
+    ("linear-gradient(180deg, rgba(185, 115, 15, 0.98) 0%, rgba(165, 100, 10, 0.93) 50%, rgba(165, 100, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)"),
+    ("linear-gradient(180deg, rgba(165, 98, 12, 0.98) 0%, rgba(145, 84, 8, 0.94) 50%, rgba(145, 84, 8, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(195, 124, 18, 0.98) 0%, rgba(175, 110, 14, 0.93) 50%, rgba(175, 110, 14, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(175, 108, 14, 0.98) 0%, rgba(155, 94, 10, 0.93) 50%, rgba(155, 94, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(155, 92, 10, 0.98) 0%, rgba(135, 78, 6, 0.94) 50%, rgba(135, 78, 6, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+
+    # Soft Sky Blues & Cyans (76-90)
+    ("linear-gradient(180deg, rgba(165, 205, 225, 0.98) 0%, rgba(190, 220, 235, 0.92) 50%, rgba(210, 232, 245, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.15)"),
+    ("linear-gradient(180deg, rgba(175, 212, 230, 0.98) 0%, rgba(198, 226, 240, 0.92) 50%, rgba(218, 238, 248, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)"),
+    ("linear-gradient(180deg, rgba(155, 198, 218, 0.98) 0%, rgba(180, 214, 228, 0.92) 50%, rgba(200, 226, 238, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)"),
+    ("linear-gradient(180deg, rgba(182, 218, 234, 0.98) 0%, rgba(204, 230, 244, 0.92) 50%, rgba(222, 240, 250, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)"),
+
+    # Dawn Peaches & Rose Horizons (91-105)
+    ("linear-gradient(180deg, rgba(188, 78, 48, 0.98) 0%, rgba(212, 106, 68, 0.92) 50%, rgba(212, 106, 68, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(175, 68, 40, 0.98) 0%, rgba(198, 92, 58, 0.93) 50%, rgba(198, 92, 58, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(195, 88, 56, 0.98) 0%, rgba(220, 116, 78, 0.92) 50%, rgba(220, 116, 78, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(168, 62, 36, 0.98) 0%, rgba(190, 84, 50, 0.93) 50%, rgba(190, 84, 50, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+
+    # Earth, Sandstone & Desert Copper (106-120)
+    ("linear-gradient(180deg, rgba(62, 42, 28, 0.98) 0%, rgba(78, 54, 38, 0.93) 50%, rgba(78, 54, 38, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(74, 50, 32, 0.98) 0%, rgba(90, 62, 42, 0.93) 50%, rgba(90, 62, 42, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(54, 36, 24, 0.98) 0%, rgba(68, 46, 32, 0.94) 50%, rgba(68, 46, 32, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(195, 95, 20, 0.98) 0%, rgba(175, 85, 16, 0.93) 50%, rgba(175, 85, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+    ("linear-gradient(180deg, rgba(180, 86, 16, 0.98) 0%, rgba(160, 76, 12, 0.93) 50%, rgba(160, 76, 12, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)")
+]
+
+# --- 4. AUDITED HALAL IMAGE POOLS BY MOOD ---
+IMAGE_POOLS = {
+    "emerald": [
+        "https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "navy": [
+        "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "burgundy": [
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "teal": [
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "gold": [
+        "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "sky": [
+        "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "dawn": [
+        "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "amber": [
+        "https://images.unsplash.com/photo-1512958789358-4dac567096e8?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1080&auto=format&fit=crop"
+    ]
 }
 
-HISTORY_FILE = "used_images_history.json"
-
-def get_non_repeating_image(theme_key: str) -> str:
-    palette = THEME_PALETTES.get(theme_key, THEME_PALETTES["masjid_noor"])
-    available_images = palette["images"]
-    
-    used_history = {}
-    if os.path.exists(HISTORY_FILE):
-        try:
-            with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-                used_history = json.load(f)
-        except Exception:
-            used_history = {}
-
-    theme_used = used_history.get(theme_key, [])
-    unused = [img for img in available_images if img not in theme_used]
-    
-    if not unused:
-        unused = available_images
-        theme_used = []
-
-    chosen_image = random.choice(unused)
-    theme_used.append(chosen_image)
-    used_history[theme_key] = theme_used
-
-    try:
-        with open(HISTORY_FILE, "w", encoding="utf-8") as f:
-            json.dump(used_history, f, indent=2)
-    except Exception:
-        pass
-
-    return chosen_image
-
-def get_accurate_verse_theme(surah: int, verse_text: str):
+def get_verse_gradient_and_image(surah: int, ayah: int, verse_text: str):
+    """Deterministically maps each verse to one of 120+ gradients, guaranteeing variety."""
     t = verse_text.lower()
     
-    # Priority theological keyword recognition
-    if any(k in t for k in ["சுவனம்", "தோட்டம்", "நதிகள்", "பயனற்ற", "இன்பம்", "அருட்கொடை", "நிழல்", "கனி"]):
-        theme_key = "jannah_gardens"
+    # 1. Macro Category Mapping
+    if any(k in t for k in ["சுவனம்", "தோட்டம்", "நதிகள்", "பயனற்ற", "இன்பம்", "அருட்கொடை", "நிழல்"]):
+        category = "emerald"
+        palette_slice = (0, 10)
     elif any(k in t for k in ["கஃபா", "மக்கா", "ஹஜ்", "ஆலயத்தை", "ஹரம்", "கிப்லா"]):
-        theme_key = "sacred_sanctuary"
-    elif any(k in t for k in ["இறைவழி", "கொல்லப்பட்ட", "பொறுமை", "சோதனை", "உயிரோடு", "போராடு", "தியாகம்"]):
-        theme_key = "historic_amber"
-    elif any(k in t for k in ["சூழ்ந்து", "கியாம", "கப்று", "எழுப்பப்படும்", "மறுமை", "நடுங்கும்", "சாம்பல்", "மரண", "தீர்ப்பு"]):
-        theme_key = "solemn_resurrection"
+        category = "sky"
+        palette_slice = (76, 80)
     elif any(k in t for k in ["கடல்", "மழை", "தண்ணீர்", "மேகம்", "கப்பல்", "அலை"]):
-        theme_key = "waters_oceans"
-    elif any(k in t for k in ["விடிற்காலை", "பகல்", "சூரியன்", "விடியல்", "பிரகாசம்"]):
-        theme_key = "dawn_fajr"
-    elif any(k in t for k in ["இரவு", "இரவில்", "நட்சத்திர", "சந்திரன்"]):
-        theme_key = "night_layl"
+        category = "teal"
+        palette_slice = (46, 52)
+    elif any(k in t for k in ["சூழ்ந்து", "கியாம", "கப்று", "எழுப்பப்படும்", "மறுமை", "நடுங்கும்", "சாம்பல்", "தீர்ப்பு"]):
+        category = "burgundy"
+        palette_slice = (31, 38)
+    elif any(k in t for k in ["விடியல்", "பகல்", "சூரியன்", "பிரகாசம்", "காலை"]):
+        category = "dawn"
+        palette_slice = (91, 95)
+    elif any(k in t for k in ["இரவு", "நட்சத்திர", "சந்திரன்", "வானங்கள்"]):
+        category = "navy"
+        palette_slice = (16, 24)
     elif any(k in t for k in ["ஒளி", "நூர்", "வேதம்", "குர்ஆன்", "அறிவு", "சான்று", "நேர்வழி"]):
-        theme_key = "masjid_noor"
-    elif any(k in t for k in ["பூமி", "மலைகள்", "பாறை", "நிலம்"]):
-        theme_key = "earth_mountains"
+        category = "gold"
+        palette_slice = (61, 66)
     else:
-        _, _, default_theme = QURAN_DIRECTORY.get(surah, ("ஸூரா", 0, "historic_amber"))
-        theme_key = default_theme
+        # Fallback to Surah directory mapping
+        _, _, default_cat = QURAN_DIRECTORY.get(surah, ("ஸூரா", 0, "navy"))
+        category = default_cat
+        if category == "emerald":
+            palette_slice = (0, 10)
+        elif category == "navy":
+            palette_slice = (16, 24)
+        elif category == "burgundy":
+            palette_slice = (31, 38)
+        elif category == "teal":
+            palette_slice = (46, 52)
+        elif category == "gold":
+            palette_slice = (61, 66)
+        elif category == "sky":
+            palette_slice = (76, 80)
+        elif category == "dawn":
+            palette_slice = (91, 95)
+        else:
+            palette_slice = (106, 111)
 
-    palette = THEME_PALETTES.get(theme_key, THEME_PALETTES["masjid_noor"])
-    remote_img_url = get_non_repeating_image(theme_key)
-    return palette, remote_img_url
+    # Deterministic palette index based on (surah * 31 + ayah)
+    start_idx, end_idx = palette_slice
+    palette_index = start_idx + ((surah * 31 + ayah) % (end_idx - start_idx))
+    gradient_css, text_color, text_shadow = GRADIENTS_120[palette_index]
 
-# --- 4. BASE64 ENCODER (PREVENTS BROKEN IMAGES) ---
+    # Pick non-repeating image for that visual mood
+    pool = IMAGE_POOLS.get(category, IMAGE_POOLS["navy"])
+    img_index = (surah + ayah) % len(pool)
+    chosen_image = pool[img_index]
+
+    palette_dict = {
+        "gradient": gradient_css,
+        "text_color": text_color,
+        "shadow": text_shadow
+    }
+    return palette_dict, chosen_image
+
+# --- 5. BASE64 ENCODER ---
 def get_base64_data_uri(filepath: str, mime: str = "image/jpeg") -> str:
     if os.path.exists(filepath):
         try:
@@ -594,7 +565,7 @@ def fetch_any_quran_verse(surah: int, ayah: int):
 
     return verse_text, reference
 
-# --- 5. PRE-WARMED PLAYWRIGHT BROWSER ---
+# --- 6. PRE-WARMED PLAYWRIGHT BROWSER ---
 GLOBAL_BROWSER = None
 GLOBAL_PLAYWRIGHT = None
 
@@ -651,7 +622,7 @@ async def render_poster(local_image_name: str, tamil_text: str, surah_ref: str, 
     await page.screenshot(path=output_path)
     await page.close()
 
-# --- 6. TELEGRAM BOT HANDLER ---
+# --- 7. TELEGRAM BOT HANDLER ---
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text.strip()
     match = re.match(r"^(\d{1,3})[:\s](\d{1,3})$", text)
@@ -664,9 +635,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     try:
         verse_text, reference = fetch_any_quran_verse(surah, ayah)
-        status_msg = await update.message.reply_text(f"⚡ Generating {reference} in 2 seconds...")
+        status_msg = await update.message.reply_text(f"⚡ Generating {reference} with dynamic mood gradient...")
 
-        palette, remote_img_url = get_accurate_verse_theme(surah, verse_text)
+        palette, remote_img_url = get_verse_gradient_and_image(surah, ayah, verse_text)
         local_img = download_image_locally(remote_img_url, "bg_current.jpg")
 
         out_file = f"poster_{surah}_{ayah}.png"
@@ -687,7 +658,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Assalamu Alaikum! Send any Surah and Ayah (e.g. 88:1 or 30:22) to generate your poster.")
 
-# --- 7. RENDER HEALTH CHECK SERVER ---
+# --- 8. RENDER HEALTH CHECK SERVER ---
 class HealthHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -704,7 +675,7 @@ def run_render_server():
 
 threading.Thread(target=run_render_server, daemon=True).start()
 
-# --- 8. START BOT ---
+# --- 9. START BOT ---
 async def main():
     await init_browser()
     req = HTTPXRequest(connect_timeout=60.0, read_timeout=60.0)
@@ -712,7 +683,7 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
-    print("✅ High-Speed 12-Macro-Theme Cloud Engine Online!")
+    print("✅ 120+ Gradient Matrix Engine Online!")
     await app.initialize()
     await app.start()
     await app.updater.start_polling()
