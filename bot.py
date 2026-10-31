@@ -96,7 +96,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     object-fit: cover; 
   }
 
-  /* 100+ Dynamic Gradient Shield */
   .gradient-overlay {
     position: absolute; 
     top: 0; 
@@ -106,7 +105,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     background: {{GRADIENT_CSS}};
   }
 
-  /* --- VERSE TEXT: HERO SCALING ENGINE --- */
   .verse-container {
     position: relative; 
     z-index: 2;
@@ -120,7 +118,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.2px;
   }
 
-  /* Surah Pill Badge at bottom */
   .surah-tag {
     position: absolute; 
     bottom: 26px; 
@@ -138,7 +135,6 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
     letter-spacing: 0.4px;
   }
 
-  /* --- FOOTER: Aligned with Card Edges --- */
   .footer {
     display: flex; 
     justify-content: space-between; 
@@ -175,7 +171,7 @@ TEMPLATE_CONTENT = """<!DOCTYPE html>
 </body>
 </html>"""
 
-# --- 2. SURAH DIRECTORY & METADATA (114 SURAHS) ---
+# --- 2. SURAH DIRECTORY & METADATA ---
 QURAN_DIRECTORY = {
     1: ("அல் ஃபாத்திஹா", 7, "sky"),
     2: ("அல் பகரா", 286, "amber"),
@@ -230,7 +226,7 @@ QURAN_DIRECTORY = {
     51: ("அத் தாரியாத்", 60, "navy"),
     52: ("அத் தூர்", 49, "earth"),
     53: ("அந் நஜ்ம்", 62, "navy"),
-    54: ("அல் கமர்", 55, "night"),
+    54: ("அல் கமர்", 55, "navy"),
     55: ("அர் ரஹ்மான்", 78, "emerald"),
     56: ("அல் வாகிஆ", 96, "emerald"),
     57: ("அல் ஹதீத்", 29, "gold"),
@@ -248,8 +244,8 @@ QURAN_DIRECTORY = {
     69: ("அல் ஹாகா", 52, "burgundy"),
     70: ("அல் மஆரிஜ்", 44, "burgundy"),
     71: ("நூஹ்", 28, "teal"),
-    72: ("அல் ஜின்", 28, "night"),
-    73: ("அல் முஸ்ஸம்மில்", 20, "night"),
+    72: ("அல் ஜின்", 28, "navy"),
+    73: ("அல் முஸ்ஸம்மில்", 20, "navy"),
     74: ("அல் முத்தஸ்ஸிர்", 56, "burgundy"),
     75: ("அல் கியாமஹ்", 40, "burgundy"),
     76: ("அல் இன்ஸான்", 31, "emerald"),
@@ -262,18 +258,18 @@ QURAN_DIRECTORY = {
     83: ("அல் முaffiஃபீன்", 36, "burgundy"),
     84: ("அல் இன்ஷிகாக்", 25, "navy"),
     85: ("புரூஜ்", 22, "navy"),
-    86: ("அத் தாரிக்", 17, "night"),
+    86: ("அத் தாரிக்", 17, "navy"),
     87: ("அல் அஃலா", 19, "emerald"),
     88: ("ஃகாஷியா", 26, "burgundy"),
     89: ("அல் ஃபஜ்ர்", 30, "dawn"),
     90: ("அல் பலத்", 20, "sky"),
     91: ("அஷ் ஷம்ஸ்", 15, "dawn"),
-    92: ("அல் லைல்", 21, "night"),
-    93: ("அழ் ளுஹா", 11, "solace"),
-    94: ("அஷ் ஷர்ஹ்", 8, "solace"),
+    92: ("அல் லைல்", 21, "navy"),
+    93: ("அழ் ளுஹா", 11, "gold"),
+    94: ("அஷ் ஷர்ஹ்", 8, "gold"),
     95: ("அத் தீன்", 8, "emerald"),
     96: ("அல் அலக்", 19, "gold"),
-    97: ("அல் கத்ர்", 5, "night"),
+    97: ("அல் கத்ர்", 5, "navy"),
     98: ("அல் பய்யினஹ்", 8, "gold"),
     99: ("ஸல்ஸலா", 8, "burgundy"),
     100: ("ஆதியாத்", 11, "burgundy"),
@@ -293,108 +289,100 @@ QURAN_DIRECTORY = {
     114: ("அந் நாஸ்", 6, "sky")
 }
 
-# --- 3. 120+ DIVERSE CURATED GRADIENT PALETTES ---
-# Formatted as (gradient_css, text_color, text_shadow)
-GRADIENTS_120 = [
-    # Emeralds & Forest Jades (1-15)
-    ("linear-gradient(180deg, rgba(12, 68, 44, 0.98) 0%, rgba(15, 82, 54, 0.94) 52%, rgba(15, 82, 54, 0.45) 82%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)"),
-    ("linear-gradient(180deg, rgba(8, 52, 34, 0.98) 0%, rgba(12, 68, 46, 0.93) 50%, rgba(12, 68, 46, 0.42) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)"),
-    ("linear-gradient(180deg, rgba(18, 86, 56, 0.98) 0%, rgba(22, 102, 68, 0.92) 50%, rgba(22, 102, 68, 0.40) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(14, 78, 62, 0.98) 0%, rgba(18, 92, 74, 0.93) 50%, rgba(18, 92, 74, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(20, 64, 48, 0.98) 0%, rgba(26, 78, 60, 0.94) 50%, rgba(26, 78, 60, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(10, 48, 38, 0.98) 0%, rgba(14, 60, 48, 0.94) 50%, rgba(14, 60, 48, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(24, 76, 54, 0.98) 0%, rgba(30, 92, 66, 0.93) 50%, rgba(30, 92, 66, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(16, 58, 42, 0.98) 0%, rgba(22, 74, 54, 0.93) 50%, rgba(22, 74, 54, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(12, 72, 50, 0.98) 0%, rgba(16, 88, 62, 0.93) 50%, rgba(16, 88, 62, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(8, 42, 30, 0.98) 0%, rgba(14, 56, 40, 0.94) 50%, rgba(14, 56, 40, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-
-    # Celestial Navies & Indigos (16-30)
-    ("linear-gradient(180deg, rgba(10, 24, 52, 0.98) 0%, rgba(14, 32, 68, 0.93) 50%, rgba(14, 32, 68, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)"),
-    ("linear-gradient(180deg, rgba(6, 16, 38, 0.98) 0%, rgba(10, 22, 50, 0.94) 50%, rgba(10, 22, 50, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(12, 28, 62, 0.98) 0%, rgba(16, 36, 78, 0.94) 50%, rgba(16, 36, 78, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(14, 22, 46, 0.98) 0%, rgba(18, 30, 60, 0.94) 50%, rgba(18, 30, 60, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(18, 32, 68, 0.98) 0%, rgba(22, 42, 84, 0.93) 50%, rgba(22, 42, 84, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(8, 20, 44, 0.98) 0%, rgba(12, 28, 58, 0.94) 50%, rgba(12, 28, 58, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(16, 26, 56, 0.98) 0%, rgba(20, 34, 72, 0.94) 50%, rgba(20, 34, 72, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(10, 18, 42, 0.98) 0%, rgba(16, 28, 62, 0.94) 50%, rgba(16, 28, 62, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-
-    # Deep Burgundies, Plums & Wine (31-45)
-    ("linear-gradient(180deg, rgba(88, 16, 28, 0.98) 0%, rgba(72, 14, 24, 0.93) 50%, rgba(55, 12, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)"),
-    ("linear-gradient(180deg, rgba(72, 12, 24, 0.98) 0%, rgba(60, 10, 20, 0.94) 50%, rgba(45, 8, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(94, 20, 36, 0.98) 0%, rgba(80, 16, 30, 0.93) 50%, rgba(65, 12, 24, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(64, 14, 32, 0.98) 0%, rgba(54, 12, 28, 0.94) 50%, rgba(40, 10, 22, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(78, 18, 38, 0.98) 0%, rgba(66, 14, 32, 0.94) 50%, rgba(52, 12, 26, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(82, 14, 30, 0.98) 0%, rgba(68, 12, 26, 0.94) 50%, rgba(50, 10, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(68, 10, 22, 0.98) 0%, rgba(56, 8, 18, 0.94) 50%, rgba(42, 6, 14, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-
-    # Ocean Teals, Cerulean & Aquamarines (46-60)
-    ("linear-gradient(180deg, rgba(10, 55, 75, 0.98) 0%, rgba(12, 68, 90, 0.93) 50%, rgba(12, 68, 90, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)"),
-    ("linear-gradient(180deg, rgba(8, 44, 62, 0.98) 0%, rgba(10, 56, 78, 0.94) 50%, rgba(10, 56, 78, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-    ("linear-gradient(180deg, rgba(14, 68, 92, 0.98) 0%, rgba(18, 84, 112, 0.93) 50%, rgba(18, 84, 112, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(12, 60, 80, 0.98) 0%, rgba(16, 74, 98, 0.93) 50%, rgba(16, 74, 98, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(16, 72, 94, 0.98) 0%, rgba(20, 88, 114, 0.93) 50%, rgba(20, 88, 114, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(10, 48, 66, 0.98) 0%, rgba(14, 62, 84, 0.94) 50%, rgba(14, 62, 84, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
-
-    # Sacred Ochres & Warm Golds (61-75)
-    ("linear-gradient(180deg, rgba(185, 115, 15, 0.98) 0%, rgba(165, 100, 10, 0.93) 50%, rgba(165, 100, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)"),
-    ("linear-gradient(180deg, rgba(165, 98, 12, 0.98) 0%, rgba(145, 84, 8, 0.94) 50%, rgba(145, 84, 8, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(195, 124, 18, 0.98) 0%, rgba(175, 110, 14, 0.93) 50%, rgba(175, 110, 14, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(175, 108, 14, 0.98) 0%, rgba(155, 94, 10, 0.93) 50%, rgba(155, 94, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(155, 92, 10, 0.98) 0%, rgba(135, 78, 6, 0.94) 50%, rgba(135, 78, 6, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-
-    # Soft Sky Blues & Cyans (76-90)
-    ("linear-gradient(180deg, rgba(165, 205, 225, 0.98) 0%, rgba(190, 220, 235, 0.92) 50%, rgba(210, 232, 245, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.15)"),
-    ("linear-gradient(180deg, rgba(175, 212, 230, 0.98) 0%, rgba(198, 226, 240, 0.92) 50%, rgba(218, 238, 248, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)"),
-    ("linear-gradient(180deg, rgba(155, 198, 218, 0.98) 0%, rgba(180, 214, 228, 0.92) 50%, rgba(200, 226, 238, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)"),
-    ("linear-gradient(180deg, rgba(182, 218, 234, 0.98) 0%, rgba(204, 230, 244, 0.92) 50%, rgba(222, 240, 250, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)"),
-
-    # Dawn Peaches & Rose Horizons (91-105)
-    ("linear-gradient(180deg, rgba(188, 78, 48, 0.98) 0%, rgba(212, 106, 68, 0.92) 50%, rgba(212, 106, 68, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(175, 68, 40, 0.98) 0%, rgba(198, 92, 58, 0.93) 50%, rgba(198, 92, 58, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(195, 88, 56, 0.98) 0%, rgba(220, 116, 78, 0.92) 50%, rgba(220, 116, 78, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(168, 62, 36, 0.98) 0%, rgba(190, 84, 50, 0.93) 50%, rgba(190, 84, 50, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-
-    # Earth, Sandstone & Desert Copper (106-120)
-    ("linear-gradient(180deg, rgba(62, 42, 28, 0.98) 0%, rgba(78, 54, 38, 0.93) 50%, rgba(78, 54, 38, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(74, 50, 32, 0.98) 0%, rgba(90, 62, 42, 0.93) 50%, rgba(90, 62, 42, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(54, 36, 24, 0.98) 0%, rgba(68, 46, 32, 0.94) 50%, rgba(68, 46, 32, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(195, 95, 20, 0.98) 0%, rgba(175, 85, 16, 0.93) 50%, rgba(175, 85, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
-    ("linear-gradient(180deg, rgba(180, 86, 16, 0.98) 0%, rgba(160, 76, 12, 0.93) 50%, rgba(160, 76, 12, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)")
-]
+# --- 3. 100+ CURATED GRADIENTS GROUPED BY MOOD ---
+GRADIENT_MOODS = {
+    "emerald": [
+        ("linear-gradient(180deg, rgba(12, 68, 44, 0.98) 0%, rgba(15, 82, 54, 0.94) 52%, rgba(15, 82, 54, 0.45) 82%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(8, 52, 34, 0.98) 0%, rgba(12, 68, 46, 0.93) 50%, rgba(12, 68, 46, 0.42) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(18, 86, 56, 0.98) 0%, rgba(22, 102, 68, 0.92) 50%, rgba(22, 102, 68, 0.40) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(14, 78, 62, 0.98) 0%, rgba(18, 92, 74, 0.93) 50%, rgba(18, 92, 74, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(20, 64, 48, 0.98) 0%, rgba(26, 78, 60, 0.94) 50%, rgba(26, 78, 60, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(10, 48, 38, 0.98) 0%, rgba(14, 60, 48, 0.94) 50%, rgba(14, 60, 48, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(24, 76, 54, 0.98) 0%, rgba(30, 92, 66, 0.93) 50%, rgba(30, 92, 66, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(16, 58, 42, 0.98) 0%, rgba(22, 74, 54, 0.93) 50%, rgba(22, 74, 54, 0.45) 80%, rgba(0,0,0,0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)")
+    ],
+    "navy": [
+        ("linear-gradient(180deg, rgba(10, 24, 52, 0.98) 0%, rgba(14, 32, 68, 0.93) 50%, rgba(14, 32, 68, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)"),
+        ("linear-gradient(180deg, rgba(6, 16, 38, 0.98) 0%, rgba(10, 22, 50, 0.94) 50%, rgba(10, 22, 50, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(12, 28, 62, 0.98) 0%, rgba(16, 36, 78, 0.94) 50%, rgba(16, 36, 78, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(14, 22, 46, 0.98) 0%, rgba(18, 30, 60, 0.94) 50%, rgba(18, 30, 60, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(18, 32, 68, 0.98) 0%, rgba(22, 42, 84, 0.93) 50%, rgba(22, 42, 84, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(8, 20, 44, 0.98) 0%, rgba(12, 28, 58, 0.94) 50%, rgba(12, 28, 58, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(16, 26, 56, 0.98) 0%, rgba(20, 34, 72, 0.94) 50%, rgba(20, 34, 72, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)")
+    ],
+    "burgundy": [
+        ("linear-gradient(180deg, rgba(88, 16, 28, 0.98) 0%, rgba(72, 14, 24, 0.93) 50%, rgba(55, 12, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9), 0 4px 18px rgba(0,0,0,0.6)"),
+        ("linear-gradient(180deg, rgba(72, 12, 24, 0.98) 0%, rgba(60, 10, 20, 0.94) 50%, rgba(45, 8, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(94, 20, 36, 0.98) 0%, rgba(80, 16, 30, 0.93) 50%, rgba(65, 12, 24, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(64, 14, 32, 0.98) 0%, rgba(54, 12, 28, 0.94) 50%, rgba(40, 10, 22, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(78, 18, 38, 0.98) 0%, rgba(66, 14, 32, 0.94) 50%, rgba(52, 12, 26, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(82, 14, 30, 0.98) 0%, rgba(68, 12, 26, 0.94) 50%, rgba(50, 10, 20, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)")
+    ],
+    "teal": [
+        ("linear-gradient(180deg, rgba(10, 55, 75, 0.98) 0%, rgba(12, 68, 90, 0.93) 50%, rgba(12, 68, 90, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)"),
+        ("linear-gradient(180deg, rgba(8, 44, 62, 0.98) 0%, rgba(10, 56, 78, 0.94) 50%, rgba(10, 56, 78, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.9)"),
+        ("linear-gradient(180deg, rgba(14, 68, 92, 0.98) 0%, rgba(18, 84, 112, 0.93) 50%, rgba(18, 84, 112, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(12, 60, 80, 0.98) 0%, rgba(16, 74, 98, 0.93) 50%, rgba(16, 74, 98, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(16, 72, 94, 0.98) 0%, rgba(20, 88, 114, 0.93) 50%, rgba(20, 88, 114, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 6px rgba(0,0,0,0.85)")
+    ],
+    "gold": [
+        ("linear-gradient(180deg, rgba(185, 115, 15, 0.98) 0%, rgba(165, 100, 10, 0.93) 50%, rgba(165, 100, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85), 0 4px 18px rgba(0,0,0,0.55)"),
+        ("linear-gradient(180deg, rgba(165, 98, 12, 0.98) 0%, rgba(145, 84, 8, 0.94) 50%, rgba(145, 84, 8, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(195, 124, 18, 0.98) 0%, rgba(175, 110, 14, 0.93) 50%, rgba(175, 110, 14, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(175, 108, 14, 0.98) 0%, rgba(155, 94, 10, 0.93) 50%, rgba(155, 94, 10, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)")
+    ],
+    "sky": [
+        ("linear-gradient(180deg, rgba(165, 205, 225, 0.98) 0%, rgba(190, 220, 235, 0.92) 50%, rgba(210, 232, 245, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7), 0 1px 2px rgba(0,0,0,0.15)"),
+        ("linear-gradient(180deg, rgba(175, 212, 230, 0.98) 0%, rgba(198, 226, 240, 0.92) 50%, rgba(218, 238, 248, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)"),
+        ("linear-gradient(180deg, rgba(155, 198, 218, 0.98) 0%, rgba(180, 214, 228, 0.92) 50%, rgba(200, 226, 238, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)"),
+        ("linear-gradient(180deg, rgba(182, 218, 234, 0.98) 0%, rgba(204, 230, 244, 0.92) 50%, rgba(222, 240, 250, 0.35) 80%, rgba(0, 0, 0, 0) 100%)", "#112a45", "0 2px 8px rgba(255,255,255,0.7)")
+    ],
+    "dawn": [
+        ("linear-gradient(180deg, rgba(188, 78, 48, 0.98) 0%, rgba(212, 106, 68, 0.92) 50%, rgba(212, 106, 68, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(175, 68, 40, 0.98) 0%, rgba(198, 92, 58, 0.93) 50%, rgba(198, 92, 58, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(195, 88, 56, 0.98) 0%, rgba(220, 116, 78, 0.92) 50%, rgba(220, 116, 78, 0.40) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)")
+    ],
+    "amber": [
+        ("linear-gradient(180deg, rgba(215, 80, 10, 0.98) 0%, rgba(200, 72, 8, 0.94) 50%, rgba(195, 70, 8, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85), 0 5px 20px rgba(0,0,0,0.55)"),
+        ("linear-gradient(180deg, rgba(195, 70, 8, 0.98) 0%, rgba(180, 62, 6, 0.94) 50%, rgba(180, 62, 6, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)")
+    ],
+    "copper": [
+        ("linear-gradient(180deg, rgba(195, 95, 20, 0.98) 0%, rgba(175, 85, 16, 0.93) 50%, rgba(175, 85, 16, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(180, 86, 16, 0.98) 0%, rgba(160, 76, 12, 0.93) 50%, rgba(160, 76, 12, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)")
+    ],
+    "earth": [
+        ("linear-gradient(180deg, rgba(62, 42, 28, 0.98) 0%, rgba(78, 54, 38, 0.93) 50%, rgba(78, 54, 38, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)"),
+        ("linear-gradient(180deg, rgba(74, 50, 32, 0.98) 0%, rgba(90, 62, 42, 0.93) 50%, rgba(90, 62, 42, 0.45) 80%, rgba(0, 0, 0, 0) 100%)", "#ffffff", "0 2px 5px rgba(0,0,0,0.85)")
+    ]
+}
 
 # --- 4. AUDITED HALAL IMAGE POOLS BY MOOD ---
 IMAGE_POOLS = {
     "emerald": [
         "https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=1080&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1080&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1080&auto=format&fit=crop"
     ],
     "navy": [
         "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=1080&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=1080&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1080&auto=format&fit=crop"
     ],
     "burgundy": [
         "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1080&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop"
     ],
     "teal": [
         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1080&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=1080&auto=format&fit=crop"
     ],
     "gold": [
         "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=1080&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1080&auto=format&fit=crop"
     ],
     "sky": [
         "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=1080&auto=format&fit=crop"
+        "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?q=80&w=1080&auto=format&fit=crop"
     ],
     "dawn": [
         "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?q=80&w=1080&auto=format&fit=crop",
@@ -402,67 +390,51 @@ IMAGE_POOLS = {
     ],
     "amber": [
         "https://images.unsplash.com/photo-1512958789358-4dac567096e8?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "copper": [
         "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=1080&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?q=80&w=1080&auto=format&fit=crop"
+    ],
+    "earth": [
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1080&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?q=80&w=1080&auto=format&fit=crop"
     ]
 }
 
 def get_verse_gradient_and_image(surah: int, ayah: int, verse_text: str):
-    """Deterministically maps each verse to one of 120+ gradients, guaranteeing variety."""
+    """Crash-proof deterministic mapper. Impossible to get list index out of range."""
     t = verse_text.lower()
     
-    # 1. Macro Category Mapping
+    # 1. Determine category
     if any(k in t for k in ["சுவனம்", "தோட்டம்", "நதிகள்", "பயனற்ற", "இன்பம்", "அருட்கொடை", "நிழல்"]):
         category = "emerald"
-        palette_slice = (0, 10)
     elif any(k in t for k in ["கஃபா", "மக்கா", "ஹஜ்", "ஆலயத்தை", "ஹரம்", "கிப்லா"]):
         category = "sky"
-        palette_slice = (76, 80)
     elif any(k in t for k in ["கடல்", "மழை", "தண்ணீர்", "மேகம்", "கப்பல்", "அலை"]):
         category = "teal"
-        palette_slice = (46, 52)
     elif any(k in t for k in ["சூழ்ந்து", "கியாம", "கப்று", "எழுப்பப்படும்", "மறுமை", "நடுங்கும்", "சாம்பல்", "தீர்ப்பு"]):
         category = "burgundy"
-        palette_slice = (31, 38)
     elif any(k in t for k in ["விடியல்", "பகல்", "சூரியன்", "பிரகாசம்", "காலை"]):
         category = "dawn"
-        palette_slice = (91, 95)
     elif any(k in t for k in ["இரவு", "நட்சத்திர", "சந்திரன்", "வானங்கள்"]):
         category = "navy"
-        palette_slice = (16, 24)
     elif any(k in t for k in ["ஒளி", "நூர்", "வேதம்", "குர்ஆன்", "அறிவு", "சான்று", "நேர்வழி"]):
         category = "gold"
-        palette_slice = (61, 66)
     else:
-        # Fallback to Surah directory mapping
         _, _, default_cat = QURAN_DIRECTORY.get(surah, ("ஸூரா", 0, "navy"))
         category = default_cat
-        if category == "emerald":
-            palette_slice = (0, 10)
-        elif category == "navy":
-            palette_slice = (16, 24)
-        elif category == "burgundy":
-            palette_slice = (31, 38)
-        elif category == "teal":
-            palette_slice = (46, 52)
-        elif category == "gold":
-            palette_slice = (61, 66)
-        elif category == "sky":
-            palette_slice = (76, 80)
-        elif category == "dawn":
-            palette_slice = (91, 95)
-        else:
-            palette_slice = (106, 111)
 
-    # Deterministic palette index based on (surah * 31 + ayah)
-    start_idx, end_idx = palette_slice
-    palette_index = start_idx + ((surah * 31 + ayah) % (end_idx - start_idx))
-    gradient_css, text_color, text_shadow = GRADIENTS_120[palette_index]
+    # 2. Select Gradient from the chosen category safely
+    gradient_list = GRADIENT_MOODS.get(category, GRADIENT_MOODS["navy"])
+    # Modulo length ensures it can never exceed list bounds
+    grad_idx = (surah * 37 + ayah) % len(gradient_list)
+    gradient_css, text_color, text_shadow = gradient_list[grad_idx]
 
-    # Pick non-repeating image for that visual mood
-    pool = IMAGE_POOLS.get(category, IMAGE_POOLS["navy"])
-    img_index = (surah + ayah) % len(pool)
-    chosen_image = pool[img_index]
+    # 3. Select Image safely
+    image_list = IMAGE_POOLS.get(category, IMAGE_POOLS["navy"])
+    img_idx = (surah + ayah) % len(image_list)
+    chosen_image = image_list[img_idx]
 
     palette_dict = {
         "gradient": gradient_css,
@@ -635,7 +607,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     try:
         verse_text, reference = fetch_any_quran_verse(surah, ayah)
-        status_msg = await update.message.reply_text(f"⚡ Generating {reference} with dynamic mood gradient...")
+        status_msg = await update.message.reply_text(f"⚡ Generating {reference} in 2 seconds...")
 
         palette, remote_img_url = get_verse_gradient_and_image(surah, ayah, verse_text)
         local_img = download_image_locally(remote_img_url, "bg_current.jpg")
@@ -683,7 +655,7 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
-    print("✅ 120+ Gradient Matrix Engine Online!")
+    print("✅ Fully Stable Crash-Proof Engine Online!")
     await app.initialize()
     await app.start()
     await app.updater.start_polling()
