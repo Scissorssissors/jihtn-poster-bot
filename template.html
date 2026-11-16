@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<style>
+  @font-face { font-family: 'Anek Tamil'; src: url({{FONT_ANEK}}) format('truetype'); font-weight: 100 800; font-display: block; }
+  @font-face { font-family: 'Noto Sans Tamil'; src: url({{FONT_NOTO}}) format('truetype'); font-weight: 100 900; font-display: block; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0;
+      font-family: 'Anek Tamil', 'Noto Sans Tamil', sans-serif;
+      -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+  body { width: 1080px; height: 1350px; overflow: hidden; position: relative;
+         background: #ffffff url({{FRAME_DATA_URI}}) no-repeat 0 0 / 1080px 1350px; }
+
+
+  .card { position: absolute; left: 38px; top: 214px; width: 1004px; height: 1052px; border-radius: 36px; overflow: hidden;
+          box-shadow: 0 14px 36px rgba(0,0,0,0.20); border: 3.5px solid #82909c; background: #111827; }
+  .bg-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+  .gradient-overlay { position: absolute; inset: 0; height: 100%; background: {{GRADIENT_CSS}}; }
+  .boost { position: absolute; inset: 0; background: rgba(0,0,0,{{BOOST}}); }   /* contrast retry */
+  .vignette { position: absolute; inset: 0; background: radial-gradient(140% 100% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%); }
+
+  .verse-wrap { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center;
+                padding: 70px 62px 120px 62px; }
+  .verse { width: 100%; color: {{TEXT_COLOR}}; font-weight: 800; text-align: center; text-shadow: {{TEXT_SHADOW}};
+           letter-spacing: 0.2px; text-wrap: balance; overflow-wrap: normal; word-break: keep-all; hyphens: none;
+           font-size: {{FONT_SIZE}}px; line-height: 1.55; }
+  .ornament { width: 110px; height: 6px; border-radius: 3px; background: {{ACCENT}}; opacity: 0.95; margin: 26px 0 0 0;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.35); }
+
+  /* ---- layout recipes ---- */
+  .layout-hero .verse-wrap { justify-content: flex-start; padding-top: 118px; }
+  .layout-center .verse-wrap { justify-content: center; padding-bottom: 150px; }
+  .layout-bottom .verse-wrap { justify-content: flex-end; padding-bottom: 130px; }
+  .layout-bottom .gradient-overlay { transform: scaleY(-1); }
+  .layout-glass .verse-wrap { justify-content: center; padding: 70px 48px 140px 48px; }
+  .layout-glass .verse { background: rgba(255,255,255,0.10); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+                         border: 1.5px solid rgba(255,255,255,0.28); border-radius: 28px; padding: 44px 40px; }
+  .layout-frame .verse-wrap { justify-content: center; padding-bottom: 150px; }
+  .layout-frame .frame { position: absolute; inset: 26px; border: 2px solid {{ACCENT}}; border-radius: 22px; opacity: 0.75; z-index: 1; }
+  .layout-frame .frame::after { content: ""; position: absolute; inset: 8px; border: 1px solid {{ACCENT}}; border-radius: 16px; opacity: 0.5; }
+  .layout-rule .verse-wrap { justify-content: center; padding-bottom: 150px; }
+  .layout-rule .rule { position: absolute; left: 50%; top: 60px; width: 2px; height: 70px; background: {{ACCENT}}; transform: translateX(-50%); z-index: 2; opacity: 0.9; }
+  .frame, .rule { display: none; }
+  .layout-frame .frame, .layout-rule .rule { display: block; }
+
+  .surah-tag { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); background: #ffffff; color: #111111;
+               font-size: 25px; font-weight: 800; padding: 9px 38px; border-radius: 7px; z-index: 3; white-space: nowrap;
+               box-shadow: 0 4px 14px rgba(0,0,0,0.35); letter-spacing: 0.4px; }
+</style>
+</head>
+<body>
+  <div class="card {{LAYOUT_CLASS}}">
+    <img class="bg-image" src="{{IMAGE_DATA_URI}}" alt="">
+    <div class="gradient-overlay"></div>
+    <div class="vignette"></div>
+    <div class="boost"></div>
+    <div class="frame"></div>
+    <div class="rule"></div>
+    <div class="verse-wrap">
+      <div class="verse" id="verse">{{VERSE_HTML}}</div>
+      <div class="ornament"></div>
+    </div>
+    <div class="surah-tag">{{SURAH_REF}}</div>
+  </div>
+</body>
+</html>
