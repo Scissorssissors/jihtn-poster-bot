@@ -144,8 +144,12 @@ async def poster_cmd(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Usage: /poster <heading>\n<body text>")
         return
     lines = raw.split("\n", 1)
-    heading = lines[0].strip()
-    text = lines[1].strip() if len(lines) > 1 else heading
+    if len(lines) > 1:
+        heading = lines[0].strip()
+        text = lines[1].strip()
+    else:
+        text = lines[0].strip()
+        heading = ""
     uid = update.effective_user.id if update.effective_user else 0
 
     session = {"text": text, "heading": heading, "theme": None, "image_desc": None,
@@ -180,12 +184,21 @@ async def _render_custom(update: Update, session: dict):
 
 
 # ---- correction / change commands inside regular message handler ----
-_CHANGE_RE = re.compile(
-    r"^change\s+(heading|text|image)\s+(.+)$", re.IGNORECASE | re.DOTALL)
+# flexible patterns: "change heading to X", "change the heading X", "change image mosque", etc.
+_HEADING_WORDS = r"(?:heading|title|தலைப்பு)"
+_TEXT_WORDS = r"(?:text|body|content|உரை)"
+_IMAGE_WORDS = r"(?:image|background|bg|photo|picture|பின்னணி)"
+
+_CHANGE_PATTERNS = [
+    re.compile(rf"^change\s+(?:the\s+)?{_HEADING_WORDS}\s+(?:to\s+)?(.+)$", re.I | re.S),
+    re.compile(rf"^change\s+(?:the\s+)?{_TEXT_WORDS}\s+(?:to\s+)?(.+)$", re.I | re.S),
+    re.compile(rf"^change\s+(?:the\s+)?{_IMAGE_WORDS}\s+(?:to\s+)?(.+)$", re.I | re.S),
+    re.compile(rf"^change\s+(?:the\s+)?{_IMAGE_WORDS}\s*$", re.I),  # no description = retry image
+]
+_FIELD_MAP = {0: "heading", 1: "text", 2: "image", 3: "image"}
 
 
 def _try_correction(text: str, uid: int) -> dict | None:
-    """If this is a correction command and user has a session, return updated session. Else None."""
     session = _sessions.get(uid)
     if not session:
         return None
@@ -193,18 +206,21 @@ def _try_correction(text: str, uid: int) -> dict | None:
     if low in ("retry", "new"):
         session["variant"] = session.get("variant", 0) + 1
         return session
-    m = _CHANGE_RE.match(text.strip())
-    if not m:
-        return None
-    field, value = m.group(1).lower(), m.group(2).strip()
-    if field == "heading":
-        session["heading"] = value
-    elif field == "text":
-        session["text"] = value
-    elif field == "image":
-        session["image_desc"] = value
-        session["variant"] = session.get("variant", 0) + 1
-    return session
+    for i, pat in enumerate(_CHANGE_PATTERNS):
+        m = pat.match(text.strip())
+        if m:
+            field = _FIELD_MAP[i]
+            value = m.group(1).strip() if m.lastindex else ""
+            if field == "heading" and value:
+                session["heading"] = value
+            elif field == "text" and value:
+                session["text"] = value
+            elif field == "image":
+                if value:
+                    session["image_desc"] = value
+                session["variant"] = session.get("variant", 0) + 1
+            return session
+    return None
 
 
 # ---- keep-alive HTTP server for Render + UptimeRobot ----
