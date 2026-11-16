@@ -118,7 +118,7 @@ async def handle(update: Update, _: ContextTypes.DEFAULT_TYPE):
 # ---- keep-alive HTTP server for Render + UptimeRobot ----
 class HealthHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200); self.end_headers(); self.wfile.write(b"Bot is Healthy and Live!")
+        self.send_response(200); self.end_headers(); self.wfile.write(b"JIHTN Poster Bot v2 (AI backgrounds) - Healthy and Live!")
     def do_HEAD(self):
         self.send_response(200); self.end_headers()
     def log_message(self, *a): pass
