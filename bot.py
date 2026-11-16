@@ -7,6 +7,11 @@ Commands:
   88:11 glass|hero|center|bottom|frame|rule   force a layout
   88:11 theme=night  force a scene family (see /themes)
   /themes            list scene families
+  /poster <text>     custom text poster (first line = heading, rest = body)
+  change heading <new heading>   edit last poster's heading
+  change text <new text>         edit last poster's body text
+  change image <description>     regenerate with described background
+  retry                          regenerate last custom poster
 """
 
 import os
@@ -34,7 +39,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 from quran import parse_reference
 from themes import SCENES
-from pipeline import make_poster
+from pipeline import make_poster, make_custom_poster
 from renderer import init_browser
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -47,11 +52,16 @@ MAX_PARALLEL = int(os.environ.get("MAX_PARALLEL", "2"))
 
 _variants: dict[tuple[int, int], int] = defaultdict(int)   # retry counter per verse
 _sem = asyncio.Semaphore(MAX_PARALLEL)
+_sessions: dict[int, dict] = {}   # user_id -> last custom poster params
 
 STAGES = {
     "fetch": "📖 வசனம் பெறப்படுகிறது...",
     "image": "🎨 AI பின்னணி உருவாக்கப்படுகிறது... (சில நொடிகள்)",
     "style": "✨ வடிவமைப்பு & எழுத்து அமைக்கப்படுகிறது...",
+}
+CUSTOM_STAGES = {
+    "image": "🎨 AI பின்னணி உருவாக்கப்படுகிறது...",
+    "style": "✨ வடிவமைப்பு அமைக்கப்படுகிறது...",
 }
 
 LAYOUTS = {"glass", "hero", "center", "bottom", "frame", "rule"}
@@ -61,7 +71,9 @@ async def start(update: Update, _: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "அஸ்ஸலாமு அலைக்கும்! 🌙\n\nஸூரா:வசன எண்ணை அனுப்புங்கள். உதாரணம்: 88:11\n\n"
         "கூடுதல்:\n• 88:11 retry  – புதிய வடிவமைப்பு\n• 88:11 dark / light\n"
-        "• 88:11 glass / hero / center / bottom / frame / rule\n• 88:11 theme=night\n• /themes"
+        "• 88:11 glass / hero / center / bottom / frame / rule\n• 88:11 theme=night\n• /themes\n\n"
+        "✍️ தனிப்பயன் போஸ்டர்:\n• /poster <heading>\\n<text>\n"
+        "• change heading <new>\n• change text <new>\n• change image <description>\n• retry"
     )
 
 
@@ -71,10 +83,18 @@ async def themes_cmd(update: Update, _: ContextTypes.DEFAULT_TYPE):
 
 async def handle(update: Update, _: ContextTypes.DEFAULT_TYPE):
     text = (update.message.text or "").strip()
-    log.info("message from %s: %r", update.effective_user.id if update.effective_user else "?", text[:40])
+    uid = update.effective_user.id if update.effective_user else 0
+    log.info("message from %s: %r", uid, text[:40])
+
+    # check for correction commands (change heading/text/image, retry)
+    session = _try_correction(text, uid)
+    if session:
+        await _render_custom(update, session)
+        return
+
     m = re.match(r"^\s*(\d{1,3}\s*[:\-/.\s]\s*\d{1,3})(.*)$", text)
     if not m:
-        await update.message.reply_text("❌ தவறான வடிவம்! உதாரணம்: 88:11")
+        await update.message.reply_text("❌ தவறான வடிவம்! உதாரணம்: 88:11\n\n✍️ /poster <heading>\\n<text> — தனிப்பயன்")
         return
     ref = parse_reference(m.group(1))
     opts = m.group(2).lower().split()
@@ -113,6 +133,78 @@ async def handle(update: Update, _: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         log.exception("render failed")
         await status.edit_text(f"⚠️ பிழை: {type(e).__name__}. மீண்டும் முயற்சிக்கவும்.")
+
+
+# ---- custom poster command ----
+async def poster_cmd(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    raw = (update.message.text or "").strip()
+    # strip /poster prefix
+    raw = re.sub(r"^/poster\s*", "", raw, flags=re.IGNORECASE).strip()
+    if not raw:
+        await update.message.reply_text("Usage: /poster <heading>\n<body text>")
+        return
+    lines = raw.split("\n", 1)
+    heading = lines[0].strip()
+    text = lines[1].strip() if len(lines) > 1 else heading
+    uid = update.effective_user.id if update.effective_user else 0
+
+    session = {"text": text, "heading": heading, "theme": None, "image_desc": None,
+               "layout": None, "tone": None, "variant": 0}
+    _sessions[uid] = session
+    await _render_custom(update, session)
+
+
+async def _render_custom(update: Update, session: dict):
+    status = await update.message.reply_text("⏳ தயாராகிறது...")
+
+    async def progress(stage):
+        try: await status.edit_text(CUSTOM_STAGES.get(stage, stage))
+        except Exception: pass
+
+    try:
+        async with _sem:
+            path, info = await make_custom_poster(
+                text=session["text"], heading=session["heading"],
+                theme=session.get("theme"), image_desc=session.get("image_desc"),
+                layout=session.get("layout"), tone=session.get("tone"),
+                variant=session.get("variant", 0), progress=progress)
+        caption = f"✍️ {info.get('heading') or 'Custom'}\n🎨 {info['theme']} · {info['layout'][7:]} · {info['seconds']}s"
+        with open(path, "rb") as f:
+            await update.message.reply_document(document=f, filename=path.name, caption=caption)
+        try: await status.delete()
+        except Exception: pass
+        log.info("OK custom %s", {k: info[k] for k in ("theme", "source", "font_size", "contrast", "seconds")})
+    except Exception as e:
+        log.exception("custom render failed")
+        await status.edit_text(f"⚠️ பிழை: {type(e).__name__}. மீண்டும் முயற்சிக்கவும்.")
+
+
+# ---- correction / change commands inside regular message handler ----
+_CHANGE_RE = re.compile(
+    r"^change\s+(heading|text|image)\s+(.+)$", re.IGNORECASE | re.DOTALL)
+
+
+def _try_correction(text: str, uid: int) -> dict | None:
+    """If this is a correction command and user has a session, return updated session. Else None."""
+    session = _sessions.get(uid)
+    if not session:
+        return None
+    low = text.strip().lower()
+    if low in ("retry", "new"):
+        session["variant"] = session.get("variant", 0) + 1
+        return session
+    m = _CHANGE_RE.match(text.strip())
+    if not m:
+        return None
+    field, value = m.group(1).lower(), m.group(2).strip()
+    if field == "heading":
+        session["heading"] = value
+    elif field == "text":
+        session["text"] = value
+    elif field == "image":
+        session["image_desc"] = value
+        session["variant"] = session.get("variant", 0) + 1
+    return session
 
 
 # ---- keep-alive HTTP server for Render + UptimeRobot ----
@@ -154,6 +246,7 @@ def main():
     app.add_error_handler(on_error)
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("themes", themes_cmd))
+    app.add_handler(CommandHandler("poster", poster_cmd))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle))
     app.run_polling(drop_pending_updates=False)
 
